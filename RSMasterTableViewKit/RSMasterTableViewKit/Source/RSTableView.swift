@@ -46,8 +46,8 @@ open class RSTableView: UITableView {
     private func initialize() {
         
         estimatedRowHeight = 50
-        rowHeight = UITableViewAutomaticDimension
         tableFooterView = UIView()
+        rowHeight = UITableViewAutomaticDimension
         register(RSTableViewCell.self, forCellReuseIdentifier: RSTableViewCell.reuseIdentifier)
     }
     
@@ -136,8 +136,8 @@ extension RSTableView {
 extension RSTableView {
     
     /// Show loading indicator
-    public func showIndicator() {
-        emptyDataView.showLoadingIndicator()
+    public func showIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
+        emptyDataView.showLoadingIndicator(title: title)
     }
     
     /// Hide loading indicator
@@ -169,8 +169,8 @@ extension RSTableView {
 extension RSTableView {
  
     // empty data view set title, description and image
-    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?) {
-        emptyDataView.setEmptyDataView(title: title, description: description, image: image)
+    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, backgroundColor: UIColor? = nil) {
+        emptyDataView.setEmptyDataView(title: title, description: description, image: image, background: backgroundColor)
     }
 }
 

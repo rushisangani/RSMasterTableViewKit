@@ -16,38 +16,43 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // setup tableview
         setupTableView()
     }
 
     func setupTableView() {
         
+        // setup cell & data at indexPath
         tableView.setup { (cell, data, indexPath) in
             cell.textLabel?.text = data as? String
         }
         
-        tableView.setEmptyDataView(title: NSAttributedString(string: "No data found"), description: nil, image: nil)
+        // empty data view
+        tableView.setEmptyDataView(title: NSAttributedString(string: "No data found"), description: nil, image: nil, backgroundColor: nil)
         
-        
+        // add pull to refresh
         tableView.addPullToRefresh {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-                self.tableView.appendData(data: ["Hello", "How are you"], animated: false)
+                //self.tableView.appendData(data: ["Darshak", "Rahul"])
+                self.tableView.setData(data: [])
             })
         }
+        
+        // pull to refresh tint color and text
+        tableView.setPullToRefresh(tintColor: UIColor.blue, attributedText: NSAttributedString(string: "Fetching data"))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.showIndicator()
+        // show indicator
+        tableView.showIndicator(title: NSAttributedString(string: "LOADING"))
         
+        // set data
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-            self.tableView.setData(data: [])
+            self.tableView.setData(data: ["Rushi", "Sagar"])
         })
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }
 

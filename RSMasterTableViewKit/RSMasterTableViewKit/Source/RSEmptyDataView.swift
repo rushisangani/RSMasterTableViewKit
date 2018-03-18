@@ -19,6 +19,8 @@ open class RSEmptyDataView: UIView {
  
     // activity indicator
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var indicatorLabel: UILabel!
+    @IBOutlet weak var indicatorStackView: UIStackView!
     
     // MARK: - Life Cycle
     open override func awakeFromNib() {
@@ -29,7 +31,7 @@ open class RSEmptyDataView: UIView {
     // MARK: - Public
     
     /// set empty dataview title, description and image
-    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?) {
+    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, background: UIColor?) {
         
         // title
         if let titleText = title {
@@ -51,16 +53,30 @@ open class RSEmptyDataView: UIView {
         }else {
             imageView.isHidden = true
         }
+        
+        // background color
+        if let bgColor = background {
+            backgroundColor = bgColor
+        }
     }
     
     /// Show loading indicator
-    public func showLoadingIndicator() {
+    public func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
         self.parentStackView.isHidden = true
+        
+        // loading indicator
+        if let color = tintColor {
+            activityIndicator.tintColor = color
+        }
         activityIndicator.startAnimating()
+        
+        // text
+        indicatorLabel.attributedText = title
     }
     
     /// Hide loading indicator
     public func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
+        indicatorLabel.text = ""
     }
 }
