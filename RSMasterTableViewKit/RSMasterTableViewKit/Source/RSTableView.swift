@@ -13,6 +13,7 @@ open class RSTableView: UITableView {
     
     // MARK: - Properties
     
+    /// datasource for tableView
     var tableViewDataSource: RSTableViewDataSource<Any>?
     
     /// pullToRefresh handler
@@ -55,7 +56,7 @@ open class RSTableView: UITableView {
     /// This function is used for tableView cell configuration
     public func setup(cellConfiguration: @escaping UITableViewCellConfiguration) {
 
-        tableViewDataSource = RSTableViewDataSource(cellConfiguration: cellConfiguration)
+        tableViewDataSource = RSTableViewDataSource<Any>(cellConfiguration: cellConfiguration)
         dataSource = tableViewDataSource
     }
     
@@ -83,8 +84,12 @@ extension RSTableView {
     
     /// append data in tableview
     public func appendData<T>(data: DataSource<T>, animated:Bool? = true) {
+        
+        // append data
         let startIndex = tableViewDataSource?.dataSource.count ?? 0
-        tableViewDataSource?.dataSource.append(data)
+        for item in data {
+            tableViewDataSource?.dataSource.append(item)
+        }
         
         if !animated! {
             reloadTableView()
@@ -95,7 +100,11 @@ extension RSTableView {
     
     /// insert data in tableview at top
     public func prependData<T>(data: DataSource<T>, animated:Bool? = true) {
-        tableViewDataSource?.dataSource.insert(data, at: 0)
+        
+        // add data at starting
+        for i in 0..<data.count {
+            tableViewDataSource?.dataSource.insert(data[i], at: i)
+        }
         
         if !animated! {
             reloadTableView()

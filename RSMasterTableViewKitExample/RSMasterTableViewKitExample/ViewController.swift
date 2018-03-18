@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         tableView.addPullToRefresh {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-                self.tableView.appendData(data: ["Hello"])
+                self.tableView.appendData(data: ["Hello", "How are you"], animated: false)
             })
         }
     }
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         tableView.showIndicator()
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-            self.tableView.setData(data: ["Rushi", "Sagar"])
+            self.tableView.setData(data: [])
         })
     }
     
