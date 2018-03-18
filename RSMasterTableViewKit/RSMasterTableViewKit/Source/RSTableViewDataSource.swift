@@ -14,14 +14,14 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     // MARK: - Properties
     
     /// data source for tableview
-    public var dataSource: DataSource<T> = [] {
+    var dataSource: DataSource<T> = [] {
         didSet {
             filteredDataSource = dataSource
         }
     }
     
     /// filtered data source for tableView
-    private var filteredDataSource: FilteredDataSource<T> = []
+    var filteredDataSource: FilteredDataSource<T> = []
     
     /// cell configuration - (cell, dataObject, indexPath)
     private var cellConfiguration: UITableViewCellConfiguration?

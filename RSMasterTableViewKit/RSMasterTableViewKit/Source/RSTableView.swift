@@ -14,26 +14,34 @@ open class RSTableView: UITableView {
     // MARK: - Properties
     
     /// datasource for tableView
-    var tableViewDataSource: RSTableViewDataSource<Any>?
-    
-    /// pullToRefresh handler
-    private var pullToRefreshHandler: PullToRefreshHandler?
+    public var tableViewDataSource: RSTableViewDataSource<Any>?
     
     /// Pull To Refresh control
-    lazy open var pullToRefresh: UIRefreshControl = {
+    lazy private var pullToRefresh: UIRefreshControl = {
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
         return refreshControl
     }()
     
-    /// empty data view
-    lazy open var emptyDataView: RSEmptyDataView = {
+    /// PullToRefresh handler
+    private var pullToRefreshHandler: PullToRefreshHandler?
+    
+    /// Empty data view
+    lazy private var emptyDataView: RSEmptyDataView = {
        
         let view: RSEmptyDataView = UIView.loadFromNib()
         view.frame = self.bounds
         backgroundView = view
         return view
+    }()
+    
+    /// SearchBar
+    lazy private var searchBar: RSTableViewSearchBar = {
+       
+        let tableViewSearchBar = RSTableViewSearchBar(tableView: self)
+        return tableViewSearchBar
+        
     }()
     
     // MARK: - Life Cycle
@@ -68,6 +76,15 @@ open class RSTableView: UITableView {
             refreshControl = pullToRefresh
         } else {
             addSubview(pullToRefresh)
+        }
+    }
+    
+    /// Add Searchbar
+    public func addSearchBar<T>(onTextDidSearch completion: @escaping UISearchBarResult<T>) {
+        searchBar.didSearch = { [weak self] (searchText) in
+            
+            // show search result
+            self?.showSearchResults(searchText: searchText, with: completion)
         }
     }
 }
@@ -121,7 +138,6 @@ extension RSTableView {
     
     /// reload tableview
     public func reloadTableView() {
-        
         DispatchQueue.main.async {
             
             if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
@@ -162,6 +178,12 @@ extension RSTableView {
     public func endPullToRefresh() {
         pullToRefresh.endRefreshing()
     }
+    
+    // pull to refresh customization
+    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString) {
+        pullToRefresh.tintColor = tintColor
+        pullToRefresh.attributedTitle = attributedText
+    }
 }
 
 // MARK: - EmptyDataView
@@ -169,19 +191,18 @@ extension RSTableView {
 extension RSTableView {
  
     // empty data view set title, description and image
-    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, backgroundColor: UIColor? = nil) {
+    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage? = nil, backgroundColor: UIColor? = nil) {
         emptyDataView.setEmptyDataView(title: title, description: description, image: image, background: backgroundColor)
     }
 }
 
-// MARK: - Customization
+// MARK: - SearchBar
 
 extension RSTableView {
     
-    // pull to refresh
-    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString) {
-        pullToRefresh.tintColor = tintColor
-        pullToRefresh.attributedTitle = attributedText
+    /// set searchbar atttibutes
+    public func setSearchbarAttributes(attributes: SearchBarAttributes) {
+        searchBar.searchBarAttributes = attributes
     }
 }
 
@@ -192,6 +213,19 @@ extension RSTableView {
     /// Checks if pull to refresh is animating
     private func isPullToRefreshAnimating() -> Bool {
         return pullToRefresh.isRefreshing
+    }
+    
+    /// This function is used to show search results for searched text
+    private func showSearchResults<T>(searchText: String, with completion: UISearchBarResult<T>) {
+        
+        // set main datasource if seachText is empty
+        var data = self.tableViewDataSource?.dataSource
+        
+        if !searchText.isEmpty {
+            data = completion(searchText)
+        }
+        self.tableViewDataSource?.filteredDataSource = data ?? []
+        self.reloadTableView()
     }
     
     /// This function adds new rows to tableview

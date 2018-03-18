@@ -31,7 +31,7 @@ open class RSEmptyDataView: UIView {
     // MARK: - Public
     
     /// set empty dataview title, description and image
-    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, background: UIColor?) {
+    func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, background: UIColor?) {
         
         // title
         if let titleText = title {
@@ -61,7 +61,7 @@ open class RSEmptyDataView: UIView {
     }
     
     /// Show loading indicator
-    public func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
+    func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
         self.parentStackView.isHidden = true
         
         // loading indicator
@@ -75,7 +75,7 @@ open class RSEmptyDataView: UIView {
     }
     
     /// Hide loading indicator
-    public func hideLoadingIndicator() {
+    func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
         indicatorLabel.text = ""
     }

@@ -38,5 +38,14 @@ public typealias FilteredDataSource<T> = [T]
 /// PullToRefresh
 public typealias PullToRefreshHandler = () -> ()
 
-/// Colors
-public let defaultSearchBarTintColor   = UIColor(white: 0.9, alpha: 0.9)
+/// UISearchBarResult
+public typealias UISearchBarResult<T> = ((_ searchText: String) -> (FilteredDataSource<T>))
+
+/// SearchBar CancelButton
+public typealias SearchBarCancelButtonAttributes = (title: String, tintColor: UIColor?)
+
+/// SearchBar TintColor
+public let defaultSearchBarTintColor  = UIColor(white: 0.9, alpha: 0.9)
+
+/// Strings
+public let defaultSearchPlaceHolder   = "Search"
