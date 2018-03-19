@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         }
         
         // empty data view
-        tableView.setEmptyDataView(title: NSAttributedString(string: "No data found"), description: nil)
+        tableView.setEmptyDataView(title: NSAttributedString(string: "NO BOOKMARKS YET"), description: NSAttributedString(string: "Bookmarked sessions will show up here.\nSo you can easily view them here later."), image: #imageLiteral(resourceName: "bookmark-nodata"))
         
         // add pull to refresh
         tableView.addPullToRefresh {
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         }
         
         // pull to refresh tint color and text
-        tableView.setPullToRefresh(tintColor: UIColor.blue, attributedText: NSAttributedString(string: "Fetching data"))
+        tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
         
         // add search bar
         tableView.addSearchBar { (searchText) -> ([Any]) in
@@ -61,7 +61,8 @@ class ViewController: UIViewController {
         
         // set data
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-            self.tableView.setData(data: self.dataArray)
+            //self.tableView.setData(data: self.dataArray)
+            self.tableView.clearData()
         })
     }
 }
