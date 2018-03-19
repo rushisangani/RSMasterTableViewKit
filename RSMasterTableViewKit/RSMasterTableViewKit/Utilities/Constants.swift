@@ -38,6 +38,9 @@ public typealias FilteredDataSource<T> = [T]
 /// PullToRefresh
 public typealias PullToRefreshHandler = () -> ()
 
+/// Infinite Scrolling
+public typealias InfiniteScrollingHandler = () -> ()
+
 /// UISearchBarResult
 public typealias UISearchBarResult = ((_ searchText: String) -> (FilteredDataSource<Any>))
 

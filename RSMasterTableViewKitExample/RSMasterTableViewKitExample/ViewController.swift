@@ -12,7 +12,7 @@ import RSMasterTableViewKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: RSTableView!
-    var dataArray = ["Rushi", "Sagar"]
+    var dataArray = ["Rushi", "Sagar", "Bhumik", "Jhanvi", "Srushti", "Mitesh", "Nirav", "Rahul B", "Swati", "Neha", "Manish", "Deepali", "Khush"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,13 +35,27 @@ class ViewController: UIViewController {
         tableView.addPullToRefresh {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-                self.dataArray.append(contentsOf: ["Darshak", "Rahul"])
-                self.tableView.setData(data: self.dataArray)
+                
+                let data = ["Darshak", "Rahul"]
+                self.dataArray.append(contentsOf: data)
+                self.tableView.appendData(data: data)
             })
         }
         
         // pull to refresh tint color and text
         tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
+        
+//        // infinite scrolling
+//        tableView.addInfiniteScrolling(fetchCount: 3) {
+//            
+//            DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
+//                
+//                let data = ["Hiral", "Bhumi", "Namita"]
+//                self.dataArray.append(contentsOf: data)
+//                self.tableView.appendData(data: data)
+//                
+//            })
+//        }
         
         // add search bar
         tableView.addSearchBar { (searchText) -> ([Any]) in
@@ -61,8 +75,7 @@ class ViewController: UIViewController {
         
         // set data
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-            //self.tableView.setData(data: self.dataArray)
-            self.tableView.clearData()
+            self.tableView.setData(data: self.dataArray)
         })
     }
 }

@@ -27,6 +27,18 @@ open class RSTableView: UITableView {
     /// PullToRefresh handler
     private var pullToRefreshHandler: PullToRefreshHandler?
     
+    /// Infinite Scrolling handler
+    private var infiniteScrollingHanlder: InfiniteScrollingHandler?
+    
+    /// checks if should fetch more data for infinite scrolling
+    var shouldFetchMoreData: Bool = false
+    
+    /// This sets to true when tableview is fetching next page data for infinite scrolling
+    private var isFetchingNextData: Bool = false
+    
+    /// Number of records to fetch for paging
+    public var infiniteScrollingFetchCount: Int = 20
+    
     /// Empty data view
     lazy private var emptyDataView: RSEmptyDataView = {
        
@@ -70,7 +82,7 @@ open class RSTableView: UITableView {
     /// This function is used for tableView cell configuration
     public func setup(cellConfiguration: @escaping UITableViewCellConfiguration) {
 
-        tableViewDataSource = RSTableViewDataSource<Any>(cellConfiguration: cellConfiguration)
+        tableViewDataSource = RSTableViewDataSource<Any>(cellConfiguration: cellConfiguration, forTableView: self)
         dataSource = tableViewDataSource
     }
     
@@ -83,6 +95,12 @@ open class RSTableView: UITableView {
         } else {
             addSubview(pullToRefresh)
         }
+    }
+    
+    /// Add Infinite Scrolling
+    public func addInfiniteScrolling(fetchCount:Int? = 20 , handler: @escaping InfiniteScrollingHandler) {
+        infiniteScrollingFetchCount = fetchCount!
+        infiniteScrollingHanlder = handler
     }
     
     /// Add Searchbar
@@ -110,6 +128,9 @@ extension RSTableView {
     public func setData<T>(data: DataSource<T>) {
         tableViewDataSource?.dataSource = data
         
+        // update fetch more data flag
+        updateShouldFetchMoreData(data: data)
+        
         // reload data if no search
         guard needToFilterResultData() else {
             reloadTableView()
@@ -118,6 +139,9 @@ extension RSTableView {
         
         // show result by search text
         showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+        
+        // update fetch more data flag
+        updateShouldFetchMoreData(data: data)
     }
     
     /// append data in tableview
@@ -128,6 +152,9 @@ extension RSTableView {
         for item in data {
             tableViewDataSource?.dataSource.append(item)
         }
+        
+        // update fetch more data flag
+        updateShouldFetchMoreData(data: data)
         
         // check if search text is present
         if needToFilterResultData() {
@@ -141,6 +168,9 @@ extension RSTableView {
         }else {
             addRows(from: startIndex, to: startIndex + data.count, inSection: 0)
         }
+        
+        // update fetch more data flag
+        updateShouldFetchMoreData(data: data)
     }
     
     /// insert data in tableview at top
@@ -150,6 +180,9 @@ extension RSTableView {
         for i in 0..<data.count {
             tableViewDataSource?.dataSource.insert(data[i], at: i)
         }
+        
+        // update fetch more data flag
+        updateShouldFetchMoreData(data: data)
         
         // check if search text is present
         if needToFilterResultData() {
@@ -167,6 +200,8 @@ extension RSTableView {
     
     /// clear all data in tableview
     public func clearData() {
+        
+        shouldFetchMoreData = false
         tableViewDataSource?.dataSource = []
         reloadTableView()
     }
@@ -243,6 +278,22 @@ extension RSTableView {
     }
 }
 
+// MARK: - Infinite Scrolling
+
+extension RSTableView {
+    
+    /// Fetch more data
+    func fetchMoreData() {
+        if isFetchingNextData { return }
+        
+        // fetch next page data
+        if let handler = self.infiniteScrollingHanlder {
+            isFetchingNextData = true
+            handler()
+        }
+    }
+}
+
 // MARK: - Private
 
 extension RSTableView {
@@ -252,9 +303,19 @@ extension RSTableView {
         return pullToRefresh.isRefreshing
     }
     
-    /// checks if filter result by search string
+    /// Checks if filter result by search string
     func needToFilterResultData() -> Bool {
         return searchBarAdded && !tableViewSearchBar.searchString.isEmpty
+    }
+    
+    /// Checks if need to fetch more data
+    func isInfiniteScrollingAdded() -> Bool {
+        return (self.infiniteScrollingHanlder != nil)
+    }
+    
+    /// updates the flag shouldFetchMoreData
+    func updateShouldFetchMoreData<T>(data: [T]) {
+        shouldFetchMoreData = (isInfiniteScrollingAdded() && data.count >= infiniteScrollingFetchCount)
     }
     
     /// This function is used to show search results for searched text

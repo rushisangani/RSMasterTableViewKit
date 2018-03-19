@@ -26,10 +26,14 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// cell configuration - (cell, dataObject, indexPath)
     private var cellConfiguration: UITableViewCellConfiguration?
     
+    /// tableview for datasource
+    weak private var tableView: RSTableView?
+    
     // MARK: - Initialize
     
-    init(cellConfiguration: @escaping UITableViewCellConfiguration) {
+    init(cellConfiguration: @escaping UITableViewCellConfiguration, forTableView tableView: RSTableView) {
         self.cellConfiguration = cellConfiguration
+        self.tableView = tableView
     }
     
     // MARK: - UITableViewDataSource
@@ -48,6 +52,16 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
 
             let dataObject = self.objectAt(indexPath: indexPath)
             config(cell, dataObject, indexPath)
+        }
+        
+        // if no data to fetch then return cell
+        guard (self.tableView?.shouldFetchMoreData)! else {
+            return cell
+        }
+        
+        // fetch more data when current tableview cell is in last 5 cells
+        if indexPath.row == filteredDataSource.count - 2 {
+            self.tableView?.fetchMoreData()
         }
         
         return cell
