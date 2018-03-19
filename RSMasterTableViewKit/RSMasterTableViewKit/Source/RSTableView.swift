@@ -37,12 +37,18 @@ open class RSTableView: UITableView {
     }()
     
     /// SearchBar
-    lazy private var searchBar: RSTableViewSearchBar = {
+    lazy private var tableViewSearchBar: RSTableViewSearchBar = {
        
-        let tableViewSearchBar = RSTableViewSearchBar(tableView: self)
-        return tableViewSearchBar
+        let searchBar = RSTableViewSearchBar(tableView: self)
+        return searchBar
         
     }()
+    
+    /// checks if searchBar is added
+    private var searchBarAdded: Bool = false
+    
+    /// SearchBar Result Handler
+    private var searchResultHandler: UISearchBarResult?
     
     // MARK: - Life Cycle
     open override func awakeFromNib() {
@@ -80,8 +86,15 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar<T>(onTextDidSearch completion: @escaping UISearchBarResult<T>) {
-        searchBar.didSearch = { [weak self] (searchText) in
+    public func addSearchBar(onTextDidSearch completion: @escaping UISearchBarResult) {
+        
+        // add as tableHeaderView
+        tableHeaderView = tableViewSearchBar.searchBar
+        searchBarAdded = true
+        searchResultHandler = completion
+        
+        // search handler
+        tableViewSearchBar.didSearch = { [weak self] (searchText) in
             
             // show search result
             self?.showSearchResults(searchText: searchText, with: completion)
@@ -96,7 +109,15 @@ extension RSTableView {
     /// sets data in tableview
     public func setData<T>(data: DataSource<T>) {
         tableViewDataSource?.dataSource = data
-        reloadTableView()
+        
+        // reload data if no search
+        guard needToFilterResultData() else {
+            reloadTableView()
+            return
+        }
+        
+        // show result by search text
+        showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
     }
     
     /// append data in tableview
@@ -108,6 +129,13 @@ extension RSTableView {
             tableViewDataSource?.dataSource.append(item)
         }
         
+        // check if search text is present
+        if needToFilterResultData() {
+            showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+            return
+        }
+        
+        // show in tableView
         if !animated! {
             reloadTableView()
         }else {
@@ -123,6 +151,13 @@ extension RSTableView {
             tableViewDataSource?.dataSource.insert(data[i], at: i)
         }
         
+        // check if search text is present
+        if needToFilterResultData() {
+            showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+            return
+        }
+        
+        // show in tableView
         if !animated! {
             reloadTableView()
         }else {
@@ -169,6 +204,8 @@ extension RSTableView {
     
     /// Pull To Refresh Handler
     @objc private func handlePullToRefresh() {
+        tableViewSearchBar.searchBar?.endEditing(true)
+        
         if let handler = pullToRefreshHandler {
             handler()
         }
@@ -202,7 +239,7 @@ extension RSTableView {
     
     /// set searchbar atttibutes
     public func setSearchbarAttributes(attributes: SearchBarAttributes) {
-        searchBar.searchBarAttributes = attributes
+        tableViewSearchBar.searchBarAttributes = attributes
     }
 }
 
@@ -211,12 +248,17 @@ extension RSTableView {
 extension RSTableView {
     
     /// Checks if pull to refresh is animating
-    private func isPullToRefreshAnimating() -> Bool {
+    func isPullToRefreshAnimating() -> Bool {
         return pullToRefresh.isRefreshing
     }
     
+    /// checks if filter result by search string
+    func needToFilterResultData() -> Bool {
+        return searchBarAdded && !tableViewSearchBar.searchString.isEmpty
+    }
+    
     /// This function is used to show search results for searched text
-    private func showSearchResults<T>(searchText: String, with completion: UISearchBarResult<T>) {
+    private func showSearchResults(searchText: String, with completion: UISearchBarResult) {
         
         // set main datasource if seachText is empty
         var data = self.tableViewDataSource?.dataSource

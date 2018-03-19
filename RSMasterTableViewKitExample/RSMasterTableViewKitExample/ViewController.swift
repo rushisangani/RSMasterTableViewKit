@@ -35,7 +35,8 @@ class ViewController: UIViewController {
         tableView.addPullToRefresh {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-                self.tableView.appendData(data: ["Darshak", "Rahul"])
+                self.dataArray.append(contentsOf: ["Darshak", "Rahul"])
+                self.tableView.setData(data: self.dataArray)
             })
         }
         
@@ -43,12 +44,12 @@ class ViewController: UIViewController {
         tableView.setPullToRefresh(tintColor: UIColor.blue, attributedText: NSAttributedString(string: "Fetching data"))
         
         // add search bar
-        tableView.addSearchBar { (searchText) -> ([String]) in
+        tableView.addSearchBar { (searchText) -> ([Any]) in
             return self.dataArray.filter({ $0.lowercased().starts(with: searchText.lowercased()) })
         }
         
         // search bar attributes
-        let attributes = SearchBarAttributes(searchPlaceHolder: "Search Name", tintColor: UIColor.blue.withAlphaComponent(0.6))
+        let attributes = SearchBarAttributes(searchPlaceHolder: "Search")
         tableView.setSearchbarAttributes(attributes: attributes)
     }
     

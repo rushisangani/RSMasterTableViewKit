@@ -39,7 +39,7 @@ public typealias FilteredDataSource<T> = [T]
 public typealias PullToRefreshHandler = () -> ()
 
 /// UISearchBarResult
-public typealias UISearchBarResult<T> = ((_ searchText: String) -> (FilteredDataSource<T>))
+public typealias UISearchBarResult = ((_ searchText: String) -> (FilteredDataSource<Any>))
 
 /// SearchBar CancelButton
 public typealias SearchBarCancelButtonAttributes = (title: String, tintColor: UIColor?)

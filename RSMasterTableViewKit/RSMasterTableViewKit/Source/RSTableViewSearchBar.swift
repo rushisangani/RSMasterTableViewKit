@@ -19,6 +19,9 @@ open class SearchBarAttributes {
     // tint color
     public var tintColor: UIColor?
     
+    // searchBar style
+    public var searchBarStyle: UISearchBarStyle?
+    
     // cancel button title & tint color
     public var cancelButtonAttributes: SearchBarCancelButtonAttributes?
     
@@ -26,10 +29,12 @@ open class SearchBarAttributes {
     
     public init() {}
     
-    public convenience init(searchPlaceHolder: String, tintColor: UIColor) {
+    /// Initialize with search placeHolder and tint color
+    public convenience init(searchPlaceHolder: String, style: UISearchBarStyle? = .default, tintColor: UIColor? = nil) {
         self.init()
         self.searchPlaceHolder = searchPlaceHolder
         self.tintColor = tintColor
+        self.searchBarStyle = style
     }
 }
 
@@ -37,7 +42,12 @@ open class SearchBarAttributes {
 open class RSTableViewSearchBar: NSObject {
     
     // MARK: - Properties
-    private var searchBar: UISearchBar?
+    
+    /// UISearchBar
+    var searchBar: UISearchBar?
+    
+    /// tableview for search bar
+    weak var tableView: RSTableView?
     
     /// to execute on search event
     var didSearch: ((String) -> ())?
@@ -45,8 +55,9 @@ open class RSTableViewSearchBar: NSObject {
     /// SearchBar Attributes
     var searchBarAttributes: SearchBarAttributes = SearchBarAttributes() {
         didSet {
-            searchBar?.tintColor = searchBarAttributes.tintColor ?? defaultSearchBarTintColor
+            searchBar?.barTintColor = searchBarAttributes.tintColor ?? defaultSearchBarTintColor
             searchBar?.placeholder = searchBarAttributes.searchPlaceHolder ?? defaultSearchPlaceHolder
+            searchBar?.searchBarStyle = searchBarAttributes.searchBarStyle ?? .default
             cancelButtonAttributes = searchBarAttributes.cancelButtonAttributes
         }
     }
@@ -54,22 +65,26 @@ open class RSTableViewSearchBar: NSObject {
     /// cancel button attributes
     var cancelButtonAttributes: SearchBarCancelButtonAttributes?
     
+    /// Search String
+    var searchString: String = ""
+    
     // MARK: - Initialize
-    init(tableView: UITableView) {
+    init(tableView: RSTableView) {
         super.init()
         
         searchBar = UISearchBar()
+        searchBar?.searchBarStyle = .default
         searchBar?.delegate = self
         searchBar?.sizeToFit()
         searchBar?.barTintColor = defaultSearchBarTintColor
         searchBar?.placeholder = defaultSearchPlaceHolder
-        
-        // add as tableHeaderView
-        tableView.tableHeaderView = searchBar
+        self.tableView = tableView
     }
     
     /// search text handler
     func searchForText(text: String?) {
+        searchString = text ?? ""
+        
         if let search = didSearch {
             search(text ?? "")
         }
@@ -91,6 +106,10 @@ open class RSTableViewSearchBar: NSObject {
 
 // MARK:- UISearchBarDelegate
 extension RSTableViewSearchBar : UISearchBarDelegate {
+    
+    public func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        return !(self.tableView?.isPullToRefreshAnimating())! 
+    }
     
     public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
