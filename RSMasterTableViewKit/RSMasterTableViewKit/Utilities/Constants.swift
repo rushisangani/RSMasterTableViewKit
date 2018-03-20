@@ -49,11 +49,7 @@ public typealias InfiniteScrollingHandler = () -> ()
 /// UISearchBarResult
 public typealias UISearchBarResult = ((_ searchText: String) -> (FilteredDataSource<Any>))
 
-/// SearchBar CancelButton
-public typealias SearchBarCancelButtonAttributes = (title: String, tintColor: UIColor?)
-
-/// SearchBar TintColor
-public let defaultSearchBarTintColor  = UIColor(white: 0.9, alpha: 0.9)
-
 /// Strings
 public let defaultSearchPlaceHolder   = "Search"
+public let searchBarCancelButtonTitle = "Cancel"
+

@@ -53,14 +53,12 @@ open class RSTableView: UITableView {
         return view
     }()
     
-    /// SearchBar
-    lazy private var tableViewSearchBar: RSTableViewSearchBar = {
-       
-        let searchBar = RSTableViewSearchBar(tableView: self)
-        return searchBar
-        
-    }()
+    /// SearchController
+    private var searchController: RSSearchController?
     
+    /// SearchBar Result Handler
+    private var searchResultHandler: UISearchBarResult?
+       
     /// FooterView
     lazy private var footerIndicatorView: UIActivityIndicatorView = {
         
@@ -69,12 +67,6 @@ open class RSTableView: UITableView {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    
-    /// checks if searchBar is added
-    private var searchBarAdded: Bool = false
-    
-    /// SearchBar Result Handler
-    private var searchResultHandler: UISearchBarResult?
     
     // MARK: - Life Cycle
     open override func awakeFromNib() {
@@ -118,18 +110,15 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar(onTextDidSearch completion: @escaping UISearchBarResult) {
-        
-        // add as tableHeaderView
-        tableHeaderView = tableViewSearchBar.searchBar
-        searchBarAdded = true
+    public func addSearchBar(viewController: UIViewController, onTextDidSearch completion: @escaping UISearchBarResult) {
+        searchController = RSSearchController(viewController: viewController, tableView: self)
         searchResultHandler = completion
         
         // search handler
-        tableViewSearchBar.didSearch = { [weak self] (searchText) in
+        searchController?.didSearch = { [weak self] (searchText) in
             
             // show search result
-            self?.showSearchResults(searchText: searchText, with: completion)
+            self?.showSearchResults(searchText: searchText)
         }
     }
 }
@@ -152,7 +141,7 @@ extension RSTableView {
         }
         
         // show result by search text
-        showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+        showSearchResults(searchText: (searchController?.searchString)!)
     }
     
     /// append data in tableview
@@ -169,7 +158,7 @@ extension RSTableView {
         
         // check if search text is present
         if needToFilterResultData() {
-            showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+            showSearchResults(searchText: (searchController?.searchString)!)
             return
         }
         
@@ -194,7 +183,7 @@ extension RSTableView {
         
         // check if search text is present
         if needToFilterResultData() {
-            showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
+            showSearchResults(searchText: (searchController?.searchString)!)
             return
         }
         
@@ -257,7 +246,7 @@ extension RSTableView {
     
     /// Pull To Refresh Handler
     @objc private func handlePullToRefresh() {
-        tableViewSearchBar.searchBar?.endEditing(true)
+        searchController?.searchController.searchBar.endEditing(true)
         
         if let handler = pullToRefreshHandler {
             handler()
@@ -292,7 +281,7 @@ extension RSTableView {
     
     /// set searchbar atttibutes
     public func setSearchbarAttributes(attributes: SearchBarAttributes) {
-        tableViewSearchBar.searchBarAttributes = attributes
+        searchController?.searchBarAttributes = attributes
     }
 }
 
@@ -334,7 +323,10 @@ extension RSTableView {
     
     /// Checks if filter result by search string
     func needToFilterResultData() -> Bool {
-        return searchBarAdded && !tableViewSearchBar.searchString.isEmpty
+        if let searchViewController = searchController, !searchViewController.searchString.isEmpty {
+            return true
+        }
+        return false
     }
     
     /// stop animations: hide refresh animation and indicator
@@ -345,13 +337,13 @@ extension RSTableView {
     }
     
     /// This function is used to show search results for searched text
-    private func showSearchResults(searchText: String, with completion: UISearchBarResult) {
+    private func showSearchResults(searchText: String) {
         
         // set main datasource if seachText is empty
         var data = self.tableViewDataSource?.dataSource
         
-        if !searchText.isEmpty {
-            data = completion(searchText)
+        if let handler = searchResultHandler, !searchText.isEmpty {
+            data = handler(searchText)
         }
         self.tableViewDataSource?.filteredDataSource = data ?? []
         self.reloadTableView()

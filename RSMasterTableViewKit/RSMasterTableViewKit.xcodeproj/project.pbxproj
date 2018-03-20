@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A294F7C220530FD800195712 /* RSMasterTableViewKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A294F7C020530FD800195712 /* RSMasterTableViewKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A294F7D5205310AB00195712 /* RSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F7D4205310AB00195712 /* RSTableView.swift */; };
-		A2A47FE0205EF6E000F989DF /* RSTableViewSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A47FDF205EF6E000F989DF /* RSTableViewSearchBar.swift */; };
+		A2A47FE0205EF6E000F989DF /* RSSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A47FDF205EF6E000F989DF /* RSSearchController.swift */; };
 		A2FC879E205D2800000DB9EE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC879C205D2800000DB9EE /* Constants.swift */; };
 		A2FC879F205D2800000DB9EE /* RSMasterTableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC879D205D2800000DB9EE /* RSMasterTableViewExtensions.swift */; };
 		A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */; };
@@ -23,7 +23,7 @@
 		A294F7C020530FD800195712 /* RSMasterTableViewKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSMasterTableViewKit.h; sourceTree = "<group>"; };
 		A294F7C120530FD800195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A294F7D4205310AB00195712 /* RSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableView.swift; sourceTree = "<group>"; };
-		A2A47FDF205EF6E000F989DF /* RSTableViewSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableViewSearchBar.swift; sourceTree = "<group>"; };
+		A2A47FDF205EF6E000F989DF /* RSSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSearchController.swift; sourceTree = "<group>"; };
 		A2FC879C205D2800000DB9EE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A2FC879D205D2800000DB9EE /* RSMasterTableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSMasterTableViewExtensions.swift; sourceTree = "<group>"; };
 		A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableViewDataSource.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 				A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */,
 				A2FC87A2205D377A000DB9EE /* RSTableViewCell.swift */,
 				A2FC87AA205D6979000DB9EE /* RSEmptyDataView.swift */,
-				A2A47FDF205EF6E000F989DF /* RSTableViewSearchBar.swift */,
+				A2A47FDF205EF6E000F989DF /* RSSearchController.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -182,7 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2FC87A3205D377A000DB9EE /* RSTableViewCell.swift in Sources */,
-				A2A47FE0205EF6E000F989DF /* RSTableViewSearchBar.swift in Sources */,
+				A2A47FE0205EF6E000F989DF /* RSSearchController.swift in Sources */,
 				A294F7D5205310AB00195712 /* RSTableView.swift in Sources */,
 				A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */,
 				A2FC879F205D2800000DB9EE /* RSMasterTableViewExtensions.swift in Sources */,
@@ -320,7 +320,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = RSMasterTableViewKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rushi.RSMasterTableViewKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -344,7 +344,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = RSMasterTableViewKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rushi.RSMasterTableViewKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
