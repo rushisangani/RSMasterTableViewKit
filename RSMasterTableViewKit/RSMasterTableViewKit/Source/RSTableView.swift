@@ -247,6 +247,7 @@ extension RSTableView {
     public func hideIndicator() {
         emptyDataView.hideLoadingIndicator()
         emptyDataView.parentStackView.isHidden = (tableViewDataSource?.dataSource.count ?? 0 > 0)
+        emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
     }
 }
 

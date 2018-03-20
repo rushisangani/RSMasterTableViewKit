@@ -55,13 +55,13 @@ class ViewController: UIViewController {
         }
         
         // add search bar
-        tableView.addSearchBar { (searchText) -> ([Any]) in
-            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
-        }
+        //        tableView.addSearchBar { (searchText) -> ([Any]) in
+        //            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
+        //        }
         
         // search bar attributes
-        let attributes = SearchBarAttributes(searchPlaceHolder: "Search")
-        tableView.setSearchbarAttributes(attributes: attributes)
+        //let attributes = SearchBarAttributes(searchPlaceHolder: "Search")
+        //tableView.setSearchbarAttributes(attributes: attributes)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,8 +73,10 @@ class ViewController: UIViewController {
         // set data
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
             
-            let data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
-            self.tableView.setData(data: data)
+            //let data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
+            //self.tableView.setData(data: data)
+            
+            self.tableView.clearData()
         })
     }
 }

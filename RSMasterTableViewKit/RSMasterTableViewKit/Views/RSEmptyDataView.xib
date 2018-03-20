@@ -53,7 +53,7 @@
                     </subviews>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
                 <constraint firstItem="r3y-n1-Is8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ACm-Yl-j4h"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bLc-Ff-5v1" secondAttribute="trailing" constant="20" id="Inf-FT-VgS"/>
