@@ -16,6 +16,11 @@ open class RSTableView: UITableView {
     /// datasource for tableView
     public var tableViewDataSource: RSTableViewDataSource<Any>?
     
+    /// dataSource array
+    public var dataSourceArray:[Any] {
+        return tableViewDataSource?.dataSource ?? []
+    }
+    
     /// Pull To Refresh control
     lazy private var pullToRefresh: UIRefreshControl = {
         
@@ -33,8 +38,8 @@ open class RSTableView: UITableView {
     /// checks if should fetch more data for infinite scrolling
     var shouldFetchMoreData: Bool = false
     
-    /// This sets to true when tableview is fetching next page data for infinite scrolling
-    private var isFetchingNextData: Bool = false
+    /// This is to manage current status of the infinite scrolling
+    private var fetchDataStatus: FetchDataStatus = .none
     
     /// Number of records to fetch for paging
     public var infiniteScrollingFetchCount: Int = 20
@@ -56,6 +61,15 @@ open class RSTableView: UITableView {
         
     }()
     
+    /// FooterView
+    lazy private var footerIndicatorView: UIActivityIndicatorView = {
+        
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        indicator.color = UIColor.darkGray
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     /// checks if searchBar is added
     private var searchBarAdded: Bool = false
     
@@ -71,9 +85,8 @@ open class RSTableView: UITableView {
     /// Initialize
     private func initialize() {
         
-        estimatedRowHeight = 50
-        tableFooterView = UIView()
-        rowHeight = UITableViewAutomaticDimension
+        estimatedRowHeight = 100
+        rowHeight = 100 // UITableViewAutomaticDimension
         register(RSTableViewCell.self, forCellReuseIdentifier: RSTableViewCell.reuseIdentifier)
     }
     
@@ -101,6 +114,7 @@ open class RSTableView: UITableView {
     public func addInfiniteScrolling(fetchCount:Int? = 20 , handler: @escaping InfiniteScrollingHandler) {
         infiniteScrollingFetchCount = fetchCount!
         infiniteScrollingHanlder = handler
+        tableFooterView = footerIndicatorView
     }
     
     /// Add Searchbar
@@ -139,9 +153,6 @@ extension RSTableView {
         
         // show result by search text
         showSearchResults(searchText: tableViewSearchBar.searchString, with: searchResultHandler!)
-        
-        // update fetch more data flag
-        updateShouldFetchMoreData(data: data)
     }
     
     /// append data in tableview
@@ -168,9 +179,6 @@ extension RSTableView {
         }else {
             addRows(from: startIndex, to: startIndex + data.count, inSection: 0)
         }
-        
-        // update fetch more data flag
-        updateShouldFetchMoreData(data: data)
     }
     
     /// insert data in tableview at top
@@ -201,19 +209,28 @@ extension RSTableView {
     /// clear all data in tableview
     public func clearData() {
         
-        shouldFetchMoreData = false
         tableViewDataSource?.dataSource = []
         reloadTableView()
+        fetchDataStatus = .none
     }
     
     /// reload tableview
     public func reloadTableView() {
         DispatchQueue.main.async {
             
-            if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
-            self.hideIndicator()
+            // stop animations
+            self.stopAnimations()
+            
             self.reloadData()
+            
+            // update fetch data status
+            self.fetchDataStatus = .completed
         }
+    }
+    
+    /// get object at specified indexPath
+    public func object(atIndexPath: IndexPath) -> Any? {
+        return self.tableViewDataSource?.objectAt(indexPath: atIndexPath)
     }
 }
 
@@ -282,15 +299,26 @@ extension RSTableView {
 
 extension RSTableView {
     
-    /// Fetch more data
+    /// Fetch more data, if not already status
     func fetchMoreData() {
-        if isFetchingNextData { return }
+        if fetchDataStatus == .started { return }
         
         // fetch next page data
         if let handler = self.infiniteScrollingHanlder {
-            isFetchingNextData = true
+            footerIndicatorView.startAnimating()
+            fetchDataStatus = .started
             handler()
         }
+    }
+    
+    /// Checks if need to fetch more data
+    func isInfiniteScrollingAdded() -> Bool {
+        return (self.infiniteScrollingHanlder != nil)
+    }
+    
+    /// updates the flag shouldFetchMoreData
+    func updateShouldFetchMoreData<T>(data: [T]) {
+        shouldFetchMoreData = (isInfiniteScrollingAdded() && data.count >= infiniteScrollingFetchCount)
     }
 }
 
@@ -308,14 +336,11 @@ extension RSTableView {
         return searchBarAdded && !tableViewSearchBar.searchString.isEmpty
     }
     
-    /// Checks if need to fetch more data
-    func isInfiniteScrollingAdded() -> Bool {
-        return (self.infiniteScrollingHanlder != nil)
-    }
-    
-    /// updates the flag shouldFetchMoreData
-    func updateShouldFetchMoreData<T>(data: [T]) {
-        shouldFetchMoreData = (isInfiniteScrollingAdded() && data.count >= infiniteScrollingFetchCount)
+    /// stop animations: hide refresh animation and indicator
+    func stopAnimations() {
+        if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
+        footerIndicatorView.stopAnimating()
+        self.hideIndicator()
     }
     
     /// This function is used to show search results for searched text
@@ -332,19 +357,17 @@ extension RSTableView {
     }
     
     /// This function adds new rows to tableview
-    func addRows(from: Int, to: Int, inSection section:Int) {
+    private func addRows(from: Int, to: Int, inSection section:Int) {
         
         var indexPaths = [IndexPath]()
         for i in from..<to {
             indexPaths.append(IndexPath(row: i, section: section))
         }
         
-        // hide refresh animation
         DispatchQueue.main.async {
             
-            // Hide refresh animation and indicator
-            if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
-            self.hideIndicator()
+            // stop animations
+            self.stopAnimations()
             
             // insert rows
             if #available(iOS 11.0, *) {
@@ -357,6 +380,9 @@ extension RSTableView {
                 self.insertRows(at: indexPaths, with: .none)
                 self.endUpdates()
             }
+            
+            // update fetch data status
+            self.fetchDataStatus = .completed
         }
     }
 }

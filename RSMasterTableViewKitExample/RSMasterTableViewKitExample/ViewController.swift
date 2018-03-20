@@ -45,17 +45,17 @@ class ViewController: UIViewController {
         // pull to refresh tint color and text
         tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
         
-//        // infinite scrolling
-//        tableView.addInfiniteScrolling(fetchCount: 3) {
-//            
-//            DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
-//                
-//                let data = ["Hiral", "Bhumi", "Namita"]
-//                self.dataArray.append(contentsOf: data)
-//                self.tableView.appendData(data: data)
-//                
-//            })
-//        }
+        // infinite scrolling
+        tableView.addInfiniteScrolling(fetchCount: 3) {
+            
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
+                
+                let data = ["Hiral", "Bhumi"]
+                self.dataArray.append(contentsOf: data)
+                self.tableView.appendData(data: data)
+                
+            })
+        }
         
         // add search bar
         tableView.addSearchBar { (searchText) -> ([Any]) in

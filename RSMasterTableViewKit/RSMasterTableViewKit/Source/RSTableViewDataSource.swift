@@ -59,7 +59,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
             return cell
         }
         
-        // fetch more data when current tableview cell is in last 5 cells
+        // fetch more data when current tableview cell is in last 2 cells
         if indexPath.row == filteredDataSource.count - 2 {
             self.tableView?.fetchMoreData()
         }
