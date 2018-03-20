@@ -12,7 +12,6 @@ import RSMasterTableViewKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: RSTableView!
-    var dataArray = ["Rushi", "Sagar", "Bhumik", "Jhanvi", "Srushti", "Mitesh", "Nirav", "Rahul B", "Swati", "Neha", "Manish", "Deepali", "Khush"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,30 +35,28 @@ class ViewController: UIViewController {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
                 
-                let data = ["Darshak", "Rahul"]
-                self.dataArray.append(contentsOf: data)
-                self.tableView.appendData(data: data)
+                let newData = ["Neha", "Namita"]
+                self.tableView.prependData(data: newData)
             })
         }
         
         // pull to refresh tint color and text
         tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
         
+        
         // infinite scrolling
         tableView.addInfiniteScrolling(fetchCount: 3) {
             
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
                 
-                let data = ["Hiral", "Bhumi"]
-                self.dataArray.append(contentsOf: data)
+                let data = ["Swati", "Srushti", "Deepali"]
                 self.tableView.appendData(data: data)
-                
             })
         }
         
         // add search bar
         tableView.addSearchBar { (searchText) -> ([Any]) in
-            return self.dataArray.filter({ $0.lowercased().starts(with: searchText.lowercased()) })
+            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
         }
         
         // search bar attributes
@@ -75,7 +72,9 @@ class ViewController: UIViewController {
         
         // set data
         DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-            self.tableView.setData(data: self.dataArray)
+            
+            let data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
+            self.tableView.setData(data: data)
         })
     }
 }

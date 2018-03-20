@@ -85,8 +85,8 @@ open class RSTableView: UITableView {
     /// Initialize
     private func initialize() {
         
-        estimatedRowHeight = 100
-        rowHeight = 100 // UITableViewAutomaticDimension
+        estimatedRowHeight = 50
+        rowHeight = UITableViewAutomaticDimension
         register(RSTableViewCell.self, forCellReuseIdentifier: RSTableViewCell.reuseIdentifier)
     }
     
