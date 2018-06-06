@@ -79,6 +79,7 @@ open class RSTableView: UITableView {
         
         estimatedRowHeight = 50
         rowHeight = UITableViewAutomaticDimension
+        tableFooterView = UIView()
         register(RSTableViewCell.self, forCellReuseIdentifier: RSTableViewCell.reuseIdentifier)
     }
     
@@ -107,6 +108,9 @@ open class RSTableView: UITableView {
         infiniteScrollingFetchCount = fetchCount!
         infiniteScrollingHanlder = handler
         tableFooterView = footerIndicatorView
+        if #available(iOS 10.0, *) {
+            prefetchDataSource = self
+        }
     }
     
     /// Add Searchbar
@@ -210,7 +214,10 @@ extension RSTableView {
             // stop animations
             self.stopAnimations()
             
+            // reload without animation
+            UIView.setAnimationsEnabled(false)
             self.reloadData()
+            UIView.setAnimationsEnabled(true)
             
             // update fetch data status
             self.fetchDataStatus = .completed
@@ -285,9 +292,15 @@ extension RSTableView {
     }
 }
 
-// MARK: - Infinite Scrolling
+// MARK: - Infinite Scrolling and Prefetch
 
-extension RSTableView {
+extension RSTableView: UITableViewDataSourcePrefetching {
+    
+    // prefetch rows
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard indexPaths.count > 0, shouldFetchMoreData else { return }
+        self.fetchMoreData()
+    }
     
     /// Fetch more data, if not already status
     func fetchMoreData() {
@@ -362,6 +375,9 @@ extension RSTableView {
             // stop animations
             self.stopAnimations()
             
+            // insert without animation
+            UIView.setAnimationsEnabled(false)
+            
             // insert rows
             if #available(iOS 11.0, *) {
                 self.performBatchUpdates({
@@ -373,6 +389,9 @@ extension RSTableView {
                 self.insertRows(at: indexPaths, with: .none)
                 self.endUpdates()
             }
+            
+            // enable animations
+            UIView.setAnimationsEnabled(true)
             
             // update fetch data status
             self.fetchDataStatus = .completed

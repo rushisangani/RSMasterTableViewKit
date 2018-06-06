@@ -29,16 +29,12 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// tableview for datasource
     weak private var tableView: RSTableView?
     
-    /// indexPath location to fetch more data
-    private var indexPathToFetchData: IndexPath
-    
     // MARK: - Initialize
     
     init(cellConfiguration: @escaping UITableViewCellConfiguration, forTableView tableView: RSTableView) {
         
         self.cellConfiguration = cellConfiguration
         self.tableView = tableView
-        indexPathToFetchData =  IndexPath(row: filteredDataSource.count-3, section: 0)
     }
     
     // MARK: - UITableViewDataSource
@@ -58,17 +54,6 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
             let dataObject = self.objectAt(indexPath: indexPath)
             config(cell, dataObject, indexPath)
         }
-        
-        // if no data to fetch then return cell
-        guard (self.tableView?.shouldFetchMoreData)! else {
-            return cell
-        }
-        
-        // fetch more data when current tableview cell is in last 3 cells
-        if indexPath.row == indexPathToFetchData.row {
-            self.tableView?.fetchMoreData()
-        }
-        
         return cell
     }
 }

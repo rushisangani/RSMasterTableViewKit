@@ -8,6 +8,9 @@
 
 import UIKit
 
+let keySearchField = "searchField"
+let keyClearButton = "clearButton"
+
 /// SearchBarAttributes
 open class SearchBarAttributes {
 
@@ -111,7 +114,7 @@ extension RSSearchController {
         setCancelButtonTItle(searchBarAttributes.cancelButtonTitle)
         
         // textField
-        if let textField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+        if let textField = searchController.searchBar.value(forKey: keySearchField) as? UITextField {
             
             textField.attributedPlaceholder = searchBarAttributes.attributedPlaceHolder
             textField.textColor = searchBarAttributes.textColor
@@ -131,7 +134,7 @@ extension RSSearchController {
             }
             
             // clear button
-            if let clearButton = textField.value(forKey: "clearButton") as? UIButton {
+            if let clearButton = textField.value(forKey: keyClearButton) as? UIButton {
                 clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
                 clearButton.tintColor = searchBarAttributes.iconsColor
             }
