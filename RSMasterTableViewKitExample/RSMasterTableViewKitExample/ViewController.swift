@@ -13,6 +13,8 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: RSTableView!
     
+    var data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi", "Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,6 +23,7 @@ class ViewController: UIViewController {
     }
 
     func setupTableView() {
+        
         
         // setup cell & data at indexPath
         tableView.setup { (cell, data, indexPath) in
@@ -33,10 +36,13 @@ class ViewController: UIViewController {
         // add pull to refresh
         tableView.addPullToRefresh {
             
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
                 
-                let newData = ["Neha", "Namita"]
-                self.tableView.prependData(data: newData)
+                let newData = ["Neha", "Namita", "Pratik", "Hiral"]
+                self.tableView.setData(data: newData)
+                //self.tableView.prependData(data: newData)
+                //self.tableView.clearData()
+                //self.tableView.updateRowData("Rushi", atIndexPath: IndexPath(row: 0, section: 0))
             })
         }
         
@@ -45,19 +51,19 @@ class ViewController: UIViewController {
         
         
         // infinite scrolling
-        tableView.addInfiniteScrolling(fetchCount: 3) {
-            
+        tableView.addInfiniteScrolling(fetchCount: 2) {
+
             DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-                
-                let data = ["Swati", "Srushti", "Deepali"]
+
+                let data = ["Swati", "Srushti"]
                 self.tableView.appendData(data: data)
             })
         }
         
         // add search bar
-        tableView.addSearchBar(viewController: self) { (searchText) -> ([Any]) in
-            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
-        }
+//        tableView.addSearchBar(viewController: self) { (searchText) -> ([Any]) in
+//            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
+//        }
         
         // search bar attributes
 //        let attributes = SearchBarAttributes()
@@ -72,10 +78,9 @@ class ViewController: UIViewController {
         tableView.showIndicator(title: NSAttributedString(string: "LOADING"))
         
         // set data
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
             
-            let data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
-            self.tableView.setData(data: data)
+            self.tableView.setData(data: self.data)
             
             //self.tableView.clearData()
         })
