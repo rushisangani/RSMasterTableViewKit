@@ -16,11 +16,6 @@ open class RSTableView: UITableView {
     /// datasource for tableView
     public var tableViewDataSource: RSTableViewDataSource<Any>?
     
-    /// dataSource array
-    public var dataSourceArray:[Any] {
-        return tableViewDataSource?.dataSource ?? []
-    }
-    
     /// Pull To Refresh control
     lazy private var pullToRefresh: UIRefreshControl = {
         
@@ -199,6 +194,18 @@ extension RSTableView {
         }
     }
     
+    /// update data at IndexPath
+    public func updateRowData<T>(_ data: T, atIndexPath indexPath: IndexPath) {
+        tableViewDataSource?.dataSource[indexPath.row] = data
+        self.updateDeleteRows(indexPaths: [indexPath], isUpdate: true)
+    }
+    
+    /// delete row data at IndexPath
+    public func deleteRowData<T>(_ data: T, atIndexPath indexPath: IndexPath) {
+        tableViewDataSource?.dataSource.remove(at: indexPath.row)
+        self.updateDeleteRows(indexPaths: [indexPath], isUpdate: false)
+    }
+    
     /// clear all data in tableview
     public func clearData() {
         
@@ -303,7 +310,7 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     }
     
     /// Fetch more data, if not already status
-    func fetchMoreData() {
+    private func fetchMoreData() {
         if fetchDataStatus == .started { return }
         
         // fetch next page data
@@ -315,12 +322,12 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     }
     
     /// Checks if need to fetch more data
-    func isInfiniteScrollingAdded() -> Bool {
+    private func isInfiniteScrollingAdded() -> Bool {
         return (self.infiniteScrollingHanlder != nil)
     }
     
     /// updates the flag shouldFetchMoreData
-    func updateShouldFetchMoreData<T>(data: [T]) {
+    private func updateShouldFetchMoreData<T>(data: [T]) {
         shouldFetchMoreData = (isInfiniteScrollingAdded() && data.count >= infiniteScrollingFetchCount)
     }
 }
@@ -330,12 +337,12 @@ extension RSTableView: UITableViewDataSourcePrefetching {
 extension RSTableView {
     
     /// Checks if pull to refresh is animating
-    func isPullToRefreshAnimating() -> Bool {
+    private func isPullToRefreshAnimating() -> Bool {
         return pullToRefresh.isRefreshing
     }
     
     /// Checks if filter result by search string
-    func needToFilterResultData() -> Bool {
+    private func needToFilterResultData() -> Bool {
         if let searchViewController = searchController, !searchViewController.searchString.isEmpty {
             return true
         }
@@ -343,7 +350,7 @@ extension RSTableView {
     }
     
     /// stop animations: hide refresh animation and indicator
-    func stopAnimations() {
+    private func stopAnimations() {
         if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
         footerIndicatorView.stopAnimating()
         self.hideIndicator()
@@ -395,6 +402,29 @@ extension RSTableView {
             
             // update fetch data status
             self.fetchDataStatus = .completed
+        }
+    }
+    
+    /// update or delete rows at IndexPaths
+    private func updateDeleteRows(indexPaths: [IndexPath], isUpdate: Bool) {
+        
+        DispatchQueue.main.async {
+            
+            // stop animations
+            self.stopAnimations()
+            
+            // reload without animation
+            UIView.setAnimationsEnabled(false)
+            
+            self.beginUpdates()
+            if isUpdate {
+                self.reloadRows(at: indexPaths, with: .none)
+            }else {
+                self.deleteRows(at: indexPaths, with: .none)
+            }
+            self.endUpdates()
+            
+            UIView.setAnimationsEnabled(true)
         }
     }
 }
