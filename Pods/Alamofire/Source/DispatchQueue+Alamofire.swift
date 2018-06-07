@@ -1,7 +1,7 @@
 //
-//  Constants.swift
+//  DispatchQueue+Alamofire.swift
 //
-//  Copyright (c) 2017 Rushi Sangani
+//  Copyright (c) 2014-2018 Alamofire Software Foundation (http://alamofire.org/)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,16 @@
 //  THE SOFTWARE.
 //
 
-
+import Dispatch
 import Foundation
-import UIKit
 
-/// TableView Fetch More Data States
-public enum FetchDataStatus {
-    case none, started, completed
+extension DispatchQueue {
+    static var userInteractive: DispatchQueue { return DispatchQueue.global(qos: .userInteractive) }
+    static var userInitiated: DispatchQueue { return DispatchQueue.global(qos: .userInitiated) }
+    static var utility: DispatchQueue { return DispatchQueue.global(qos: .utility) }
+    static var background: DispatchQueue { return DispatchQueue.global(qos: .background) }
+
+    func after(_ delay: TimeInterval, execute closure: @escaping () -> Void) {
+        asyncAfter(deadline: .now() + delay, execute: closure)
+    }
 }
-
-/// UITableViewCellConfiguration
-public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())
-
-/// DataSource
-public typealias DataSource<T> = [T]
-
-/// FilteredDataSource
-public typealias FilteredDataSource<T> = [T]
-
-/// PullToRefresh
-public typealias PullToRefreshHandler = () -> ()
-
-/// Infinite Scrolling
-public typealias InfiniteScrollingHandler = () -> ()
-
-/// UISearchBarResult
-public typealias UISearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))
-
-/// Strings
-public let defaultSearchPlaceHolder   = "Search"
-public let searchBarCancelButtonTitle = "Cancel"
-

@@ -1,7 +1,12 @@
 //
-//  Constants.swift
+//  DataTransform.swift
+//  ObjectMapper
 //
-//  Copyright (c) 2017 Rushi Sangani
+//  Created by Yagrushkin, Evgeny on 8/30/16.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014-2016 Hearst
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +25,26 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-//
-
 
 import Foundation
-import UIKit
 
-/// TableView Fetch More Data States
-public enum FetchDataStatus {
-    case none, started, completed
+open class DataTransform: TransformType {
+	public typealias Object = Data
+	public typealias JSON = String
+	
+	public init() {}
+	
+	open func transformFromJSON(_ value: Any?) -> Data? {
+		guard let string = value as? String else{
+			return nil
+		}
+		return Data(base64Encoded: string)
+	}
+	
+	open func transformToJSON(_ value: Data?) -> String? {
+		guard let data = value else{
+			return nil
+		}
+		return data.base64EncodedString()
+	}
 }
-
-/// UITableViewCellConfiguration
-public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())
-
-/// DataSource
-public typealias DataSource<T> = [T]
-
-/// FilteredDataSource
-public typealias FilteredDataSource<T> = [T]
-
-/// PullToRefresh
-public typealias PullToRefreshHandler = () -> ()
-
-/// Infinite Scrolling
-public typealias InfiniteScrollingHandler = () -> ()
-
-/// UISearchBarResult
-public typealias UISearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))
-
-/// Strings
-public let defaultSearchPlaceHolder   = "Search"
-public let searchBarCancelButtonTitle = "Cancel"
-

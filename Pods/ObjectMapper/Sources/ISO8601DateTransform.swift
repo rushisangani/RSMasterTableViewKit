@@ -1,7 +1,12 @@
 //
-//  Constants.swift
+//  ISO8601DateTransform.swift
+//  ObjectMapper
 //
-//  Copyright (c) 2017 Rushi Sangani
+//  Created by Jean-Pierre Mouilleseaux on 21 Nov 2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014-2016 Hearst
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +25,23 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-//
-
 
 import Foundation
-import UIKit
 
-/// TableView Fetch More Data States
-public enum FetchDataStatus {
-    case none, started, completed
+public extension DateFormatter {
+	public convenience init(withFormat format : String, locale : String) {
+		self.init()
+		self.locale = Locale(identifier: locale)
+		dateFormat = format
+	}
 }
 
-/// UITableViewCellConfiguration
-public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())
+open class ISO8601DateTransform: DateFormatterTransform {
+	
+	static let reusableISODateFormatter = DateFormatter(withFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", locale: "en_US_POSIX")
 
-/// DataSource
-public typealias DataSource<T> = [T]
-
-/// FilteredDataSource
-public typealias FilteredDataSource<T> = [T]
-
-/// PullToRefresh
-public typealias PullToRefreshHandler = () -> ()
-
-/// Infinite Scrolling
-public typealias InfiniteScrollingHandler = () -> ()
-
-/// UISearchBarResult
-public typealias UISearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))
-
-/// Strings
-public let defaultSearchPlaceHolder   = "Search"
-public let searchBarCancelButtonTitle = "Cancel"
+	public init() {
+		super.init(dateFormatter: ISO8601DateTransform.reusableISODateFormatter)
+	}
+}
 

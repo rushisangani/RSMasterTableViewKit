@@ -8,13 +8,22 @@
 
 import UIKit
 import RSMasterTableViewKit
+import Alamofire
+import ObjectMapper
+
+let cellIdentifier = "cell"
+let defaultPostFetchCount = 20
+let serverURL = "https://jsonplaceholder.typicode.com/posts"
 
 class ViewController: UIViewController {
 
+    // MARK: - Outlets
     @IBOutlet weak var tableView: RSTableView!
     
-    var data = ["Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi", "Rahul", "Rushi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi", "Pratik", "Hiral", "Mitesh", "Nirav", "Bhumik", "Jhanvi"]
+    // MARK: - Properties
+    var dataSource: RSTableViewDataSource<Post>?
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,68 +31,59 @@ class ViewController: UIViewController {
         setupTableView()
     }
 
-    func setupTableView() {
-        
-        
-        // setup cell & data at indexPath
-        tableView.setup { (cell, data, indexPath) in
-            cell.textLabel?.text = data as? String
-        }
-        
-        // empty data view
-        tableView.setEmptyDataView(title: NSAttributedString(string: "NO BOOKMARKS YET"), description: NSAttributedString(string: "Bookmarked sessions will show up here.\nSo you can easily view them here later."), image: #imageLiteral(resourceName: "bookmark-nodata"))
-        
-        // add pull to refresh
-        tableView.addPullToRefresh {
-            
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
-                
-                let newData = ["Neha", "Namita", "Pratik", "Hiral"]
-                self.tableView.setData(data: newData)
-                //self.tableView.prependData(data: newData)
-                //self.tableView.clearData()
-                //self.tableView.updateRowData("Rushi", atIndexPath: IndexPath(row: 0, section: 0))
-            })
-        }
-        
-        // pull to refresh tint color and text
-        tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
-        
-        
-        // infinite scrolling
-        tableView.addInfiniteScrolling(fetchCount: 2) {
-
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2 , execute: {
-
-                let data = ["Swati", "Srushti"]
-                self.tableView.appendData(data: data)
-            })
-        }
-        
-        // add search bar
-//        tableView.addSearchBar(viewController: self) { (searchText) -> ([Any]) in
-//            return self.tableView.dataSourceArray.filter({ ($0 as! String).lowercased().starts(with: searchText.lowercased()) })
-//        }
-        
-        // search bar attributes
-//        let attributes = SearchBarAttributes()
-//        attributes.cancelButtonTitle = "Discard"
-//        tableView.setSearchbarAttributes(attributes: attributes)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // show indicator
-        tableView.showIndicator(title: NSAttributedString(string: "LOADING"))
+        tableView.showIndicator()
         
-        // set data
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1 , execute: {
-            
-            self.tableView.setData(data: self.data)
-            
-            //self.tableView.clearData()
+        self.fetchDataFromServer { (posts) in
+            self.dataSource?.setData(data: posts)
+        }
+    }
+    
+    func setupTableView() {
+        
+        // setup tableview and data source
+        dataSource = RSTableViewDataSource<Post>(tableView: tableView, identifier: cellIdentifier, cellConfiguration: { (cell, post, indexPath) in
+            cell.textLabel?.text = post.title
+            cell.detailTextLabel?.text = post.body
         })
+        
+        // show empty data view when no data
+        tableView.setEmptyDataView(title: NSAttributedString(string: "NO POSTS AVAILABLE"), description: NSAttributedString(string: "Posts that you have uploaded will appear here."), image: #imageLiteral(resourceName: "posts-nodata"))
+        
+        // add pull to refresh
+        tableView.addPullToRefresh {
+
+            self.fetchDataFromServer(completion: { (posts) in
+                self.dataSource?.setData(data: [])
+            })
+        }
+        
+        // pull to refresh tint color and text
+        //tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
+        
+        // show search bar
+        //tableView.addSearchBar(viewController: self)
+        
+        // search result
+        //dataSource?.searchResultHandler = { (searchText, data) in
+        //    return data.filter({ $0.title.lowercased().starts(with: searchText.lowercased()) })
+        //}
+    }
+}
+
+extension ViewController {
+    
+    /// fetch data from server
+    func fetchDataFromServer(completion: @escaping ([Post]) -> ()) {
+        
+        Alamofire.request(serverURL).responseJSON { (response) in
+            if let json = response.result.value, let posts = Mapper<Post>().mapArray(JSONObject: json) {
+                completion(posts)
+            }
+        }
     }
 }
 

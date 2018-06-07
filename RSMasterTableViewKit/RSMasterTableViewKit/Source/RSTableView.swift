@@ -8,13 +8,20 @@
 
 import UIKit
 
+/// SearchResultUpdateDelegate to get filtered data based on search text
+protocol SearchResultUpdateDelegate: class {
+    
+    /// To be called when user start typing on search box or to filter data based on search text
+    func getResultForSearchString(_ text: String)
+    
+    /// To get total item count
+    func getDataSourceCount() -> Int
+}
+
 /// RSTableView
 open class RSTableView: UITableView {
     
     // MARK: - Properties
-    
-    /// datasource for tableView
-    public var tableViewDataSource: RSTableViewDataSource<Any>?
     
     /// Pull To Refresh control
     lazy private var pullToRefresh: UIRefreshControl = {
@@ -31,7 +38,7 @@ open class RSTableView: UITableView {
     private var infiniteScrollingHanlder: InfiniteScrollingHandler?
     
     /// checks if should fetch more data for infinite scrolling
-    var shouldFetchMoreData: Bool = false
+    private var shouldFetchMoreData: Bool = false
     
     /// This is to manage current status of the infinite scrolling
     private var fetchDataStatus: FetchDataStatus = .none
@@ -51,9 +58,9 @@ open class RSTableView: UITableView {
     /// SearchController
     private var searchController: RSSearchController?
     
-    /// SearchBar Result Handler
-    private var searchResultHandler: UISearchBarResult?
-       
+    /// SearchResult Update Delegate
+    weak var searchResultUpdateDelegate: SearchResultUpdateDelegate?
+    
     /// FooterView
     lazy private var footerIndicatorView: UIActivityIndicatorView = {
         
@@ -75,17 +82,9 @@ open class RSTableView: UITableView {
         estimatedRowHeight = 50
         rowHeight = UITableViewAutomaticDimension
         tableFooterView = UIView()
-        register(RSTableViewCell.self, forCellReuseIdentifier: RSTableViewCell.reuseIdentifier)
     }
     
     // MARK: - Public
-    
-    /// This function is used for tableView cell configuration
-    public func setup(cellConfiguration: @escaping UITableViewCellConfiguration) {
-
-        tableViewDataSource = RSTableViewDataSource<Any>(cellConfiguration: cellConfiguration, forTableView: self)
-        dataSource = tableViewDataSource
-    }
     
     /// Add PullToRefresh to tableview
     public func addPullToRefresh(handler: @escaping PullToRefreshHandler) {
@@ -109,29 +108,32 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar(viewController: UIViewController, onTextDidSearch completion: @escaping UISearchBarResult) {
+    public func addSearchBar(viewController: UIViewController, attributes: SearchBarAttributes? = nil) {
         searchController = RSSearchController(viewController: viewController, tableView: self)
-        searchResultHandler = completion
+        
+        // apply attributes
+        if let searchBarAttributes = attributes {
+            searchController?.searchBarAttributes = searchBarAttributes
+        }
         
         // search handler
         searchController?.didSearch = { [weak self] (searchText) in
             
             // show search result
-            self?.showSearchResults(searchText: searchText)
+            self?.searchResultUpdateDelegate?.getResultForSearchString(searchText)
         }
     }
 }
 
-// MARK: - Data Update
+// MARK: - RSTableViewDataSourceUpdate
 
-extension RSTableView {
+extension RSTableView: RSTableViewDataSourceUpdate {
     
-    /// sets data in tableview
-    public func setData<T>(data: DataSource<T>) {
-        tableViewDataSource?.dataSource = data
+    /// new data updated in dataSource
+    func didSetDataSource(count: Int) {
         
         // update fetch more data flag
-        updateShouldFetchMoreData(data: data)
+        updateShouldFetchMoreData(count: count)
         
         // reload data if no search
         guard needToFilterResultData() else {
@@ -140,100 +142,44 @@ extension RSTableView {
         }
         
         // show result by search text
-        showSearchResults(searchText: (searchController?.searchString)!)
+        self.searchResultUpdateDelegate?.getResultForSearchString((searchController?.searchString)!)
     }
     
-    /// append data in tableview
-    public func appendData<T>(data: DataSource<T>, animated:Bool? = true) {
-        
-        // append data
-        let startIndex = tableViewDataSource?.dataSource.count ?? 0
-        for item in data {
-            tableViewDataSource?.dataSource.append(item)
-        }
+    /// new data added in dataSource
+    func didAddedToDataSource(start: Int, withTotalCount count: Int) {
         
         // update fetch more data flag
-        updateShouldFetchMoreData(data: data)
+        updateShouldFetchMoreData(count: count)
         
         // check if search text is present
         if needToFilterResultData() {
-            showSearchResults(searchText: (searchController?.searchString)!)
+            self.searchResultUpdateDelegate?.getResultForSearchString((searchController?.searchString)!)
             return
         }
         
-        // show in tableView
-        if !animated! {
-            reloadTableView()
-        }else {
-            addRows(from: startIndex, to: startIndex + data.count, inSection: 0)
-        }
+        // add rows to tableView
+        addRows(from: start, to: start + count, inSection: 0)
     }
     
-    /// insert data in tableview at top
-    public func prependData<T>(data: DataSource<T>, animated:Bool? = true) {
-        
-        // add data at starting
-        for i in 0..<data.count {
-            tableViewDataSource?.dataSource.insert(data[i], at: i)
-        }
-        
-        // update fetch more data flag
-        updateShouldFetchMoreData(data: data)
-        
-        // check if search text is present
-        if needToFilterResultData() {
-            showSearchResults(searchText: (searchController?.searchString)!)
-            return
-        }
-        
-        // show in tableView
-        if !animated! {
-            reloadTableView()
-        }else {
-            addRows(from: 0, to: data.count, inSection: 0)
-        }
+    /// data updated at specified index in dataSource
+    func didUpdatedDataSourceAt(index: Int) {
+        updateDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: true)
     }
     
-    /// update data at IndexPath
-    public func updateRowData<T>(_ data: T, atIndexPath indexPath: IndexPath) {
-        tableViewDataSource?.dataSource[indexPath.row] = data
-        self.updateDeleteRows(indexPaths: [indexPath], isUpdate: true)
+    /// data deleted at specified index in dataSource
+    func didDeletedDataDataSourceAt(index: Int) {
+        updateDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: false)
     }
-    
-    /// delete row data at IndexPath
-    public func deleteRowData<T>(_ data: T, atIndexPath indexPath: IndexPath) {
-        tableViewDataSource?.dataSource.remove(at: indexPath.row)
-        self.updateDeleteRows(indexPaths: [indexPath], isUpdate: false)
-    }
-    
-    /// clear all data in tableview
-    public func clearData() {
-        
-        tableViewDataSource?.dataSource = []
+
+    /// all data removed from dataSource
+    func didRemovedData() {
         reloadTableView()
         fetchDataStatus = .none
     }
     
-    /// reload tableview
-    public func reloadTableView() {
-        DispatchQueue.main.async {
-            
-            // stop animations
-            self.stopAnimations()
-            
-            // reload without animation
-            UIView.setAnimationsEnabled(false)
-            self.reloadData()
-            UIView.setAnimationsEnabled(true)
-            
-            // update fetch data status
-            self.fetchDataStatus = .completed
-        }
-    }
-    
-    /// get object at specified indexPath
-    public func object(atIndexPath: IndexPath) -> Any? {
-        return self.tableViewDataSource?.objectAt(indexPath: atIndexPath)
+    /// reload
+    func reload() {
+        reloadTableView()
     }
 }
 
@@ -249,7 +195,7 @@ extension RSTableView {
     /// Hide loading indicator
     public func hideIndicator() {
         emptyDataView.hideLoadingIndicator()
-        emptyDataView.parentStackView.isHidden = (tableViewDataSource?.dataSource.count ?? 0 > 0)
+        emptyDataView.parentStackView.isHidden = (searchResultUpdateDelegate?.getDataSourceCount() ?? 0 > 0)
         emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
     }
 }
@@ -327,8 +273,8 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     }
     
     /// updates the flag shouldFetchMoreData
-    private func updateShouldFetchMoreData<T>(data: [T]) {
-        shouldFetchMoreData = (isInfiniteScrollingAdded() && data.count >= infiniteScrollingFetchCount)
+    private func updateShouldFetchMoreData(count: Int) {
+        shouldFetchMoreData = (isInfiniteScrollingAdded() && count >= infiniteScrollingFetchCount)
     }
 }
 
@@ -356,17 +302,21 @@ extension RSTableView {
         self.hideIndicator()
     }
     
-    /// This function is used to show search results for searched text
-    private func showSearchResults(searchText: String) {
-        
-        // set main datasource if seachText is empty
-        var data = self.tableViewDataSource?.dataSource
-        
-        if let handler = searchResultHandler, !searchText.isEmpty {
-            data = handler(searchText)
+    /// reload tableview
+    private func reloadTableView() {
+        DispatchQueue.main.async {
+            
+            // stop animations
+            self.stopAnimations()
+            
+            // reload without animation
+            UIView.setAnimationsEnabled(false)
+            self.reloadData()
+            UIView.setAnimationsEnabled(true)
+            
+            // update fetch data status
+            self.fetchDataStatus = .completed
         }
-        self.tableViewDataSource?.filteredDataSource = data ?? []
-        self.reloadTableView()
     }
     
     /// This function adds new rows to tableview
@@ -407,7 +357,6 @@ extension RSTableView {
     
     /// update or delete rows at IndexPaths
     private func updateDeleteRows(indexPaths: [IndexPath], isUpdate: Bool) {
-        
         DispatchQueue.main.async {
             
             // stop animations

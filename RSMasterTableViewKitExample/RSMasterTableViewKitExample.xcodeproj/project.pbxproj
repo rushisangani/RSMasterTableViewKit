@@ -15,6 +15,9 @@
 		A294F7D02053105100195712 /* RSMasterTableViewKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; };
 		A294F7D12053105100195712 /* RSMasterTableViewKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2FC87AD205D8565000DB9EE /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */; };
+		D8B7629920C900D900DE46AC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B7629820C900D900DE46AC /* Post.swift */; };
+		D8B7629B20C90DA900DE46AC /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B7629A20C90DA900DE46AC /* PostTableViewCell.swift */; };
+		F19FFB7B5A44B231998B8A79 /* Pods_RSMasterTableViewKitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +35,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		14090770F20DD10FE09930A8 /* Pods-RSMasterTableViewKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSMasterTableViewKitExample.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample.debug.xcconfig"; sourceTree = "<group>"; };
+		9DE429C2D9D4A9A8C622E3C0 /* Pods-RSMasterTableViewKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSMasterTableViewKitExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample.release.xcconfig"; sourceTree = "<group>"; };
 		A294F78D20530F4B00195712 /* RSMasterTableViewKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSMasterTableViewKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A294F79020530F4B00195712 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A294F79220530F4B00195712 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -41,6 +46,9 @@
 		A294F79C20530F4B00195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
+		B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RSMasterTableViewKitExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8B7629820C900D900DE46AC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		D8B7629A20C90DA900DE46AC /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,18 +57,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				A294F7D02053105100195712 /* RSMasterTableViewKit.framework in Frameworks */,
+				F19FFB7B5A44B231998B8A79 /* Pods_RSMasterTableViewKitExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52D9D2283A2F07C90EF33C4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A294F78420530F4B00195712 = {
 			isa = PBXGroup;
 			children = (
 				A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */,
 				A294F78F20530F4B00195712 /* RSMasterTableViewKitExample */,
 				A294F78E20530F4B00195712 /* Products */,
+				F15F0032BB55E809D3A524F4 /* Pods */,
+				52D9D2283A2F07C90EF33C4A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +96,8 @@
 			children = (
 				A294F79020530F4B00195712 /* AppDelegate.swift */,
 				A294F79220530F4B00195712 /* ViewController.swift */,
+				D8B7629A20C90DA900DE46AC /* PostTableViewCell.swift */,
+				D8B7629820C900D900DE46AC /* Post.swift */,
 				A294F79420530F4B00195712 /* Main.storyboard */,
 				A294F79720530F4B00195712 /* Assets.xcassets */,
 				A294F79920530F4B00195712 /* LaunchScreen.storyboard */,
@@ -86,6 +107,15 @@
 			path = RSMasterTableViewKitExample;
 			sourceTree = "<group>";
 		};
+		F15F0032BB55E809D3A524F4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				14090770F20DD10FE09930A8 /* Pods-RSMasterTableViewKitExample.debug.xcconfig */,
+				9DE429C2D9D4A9A8C622E3C0 /* Pods-RSMasterTableViewKitExample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -93,10 +123,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A294F79F20530F4B00195712 /* Build configuration list for PBXNativeTarget "RSMasterTableViewKitExample" */;
 			buildPhases = (
+				7DB92D0AB8EF373AA30CEF89 /* [CP] Check Pods Manifest.lock */,
 				A294F78920530F4B00195712 /* Sources */,
 				A294F78A20530F4B00195712 /* Frameworks */,
 				A294F78B20530F4B00195712 /* Resources */,
 				A294F7D22053105100195712 /* Embed Frameworks */,
+				C5CE38BE89EC83C2204A4F13 /* [CP] Embed Pods Frameworks */,
+				204BB1B261D3560D8A91CC5D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -114,7 +147,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Rushi Sangani";
 				TargetAttributes = {
 					A294F78C20530F4B00195712 = {
@@ -154,6 +187,62 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		204BB1B261D3560D8A91CC5D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7DB92D0AB8EF373AA30CEF89 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RSMasterTableViewKitExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5CE38BE89EC83C2204A4F13 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A294F78920530F4B00195712 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -161,7 +250,9 @@
 			files = (
 				A294F79320530F4B00195712 /* ViewController.swift in Sources */,
 				A294F79120530F4B00195712 /* AppDelegate.swift in Sources */,
+				D8B7629B20C90DA900DE46AC /* PostTableViewCell.swift in Sources */,
 				A2FC87AD205D8565000DB9EE /* MyTableViewCell.swift in Sources */,
+				D8B7629920C900D900DE46AC /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +292,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -208,6 +300,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -258,6 +351,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -265,6 +359,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -296,14 +391,15 @@
 		};
 		A294F7A020530F4B00195712 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14090770F20DD10FE09930A8 /* Pods-RSMasterTableViewKitExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M9KRH522ST;
+				DEVELOPMENT_TEAM = RQ9BPQCP49;
 				INFOPLIST_FILE = RSMasterTableViewKitExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meditab.RSMasterTableViewKitExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meditab.events;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -312,14 +408,15 @@
 		};
 		A294F7A120530F4B00195712 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9DE429C2D9D4A9A8C622E3C0 /* Pods-RSMasterTableViewKitExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M9KRH522ST;
+				DEVELOPMENT_TEAM = RQ9BPQCP49;
 				INFOPLIST_FILE = RSMasterTableViewKitExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.meditab.RSMasterTableViewKitExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.meditab.events;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
