@@ -60,6 +60,11 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// SearchBar Result Handler
     public var searchResultHandler: UISearchBarResult<T>?
     
+    /// get datasource count
+    public var count: Int {
+        return dataSource.count
+    }
+    
     // MARK: - Initialize
     
     public init(tableView: RSTableView, identifier: String, cellConfiguration: @escaping UITableViewCellConfiguration<T>) {
@@ -162,7 +167,7 @@ extension RSTableViewDataSource: SearchResultUpdateDelegate {
     }
     
     /// called to get data count
-    func getDataSourceCount() -> Int {
-        return dataSource.count
+    func getCount() -> Int {
+        return count
     }
 }

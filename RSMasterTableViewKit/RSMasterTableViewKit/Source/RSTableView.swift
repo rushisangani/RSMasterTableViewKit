@@ -15,7 +15,7 @@ protocol SearchResultUpdateDelegate: class {
     func getResultForSearchString(_ text: String)
     
     /// To get total item count
-    func getDataSourceCount() -> Int
+    func getCount() -> Int
 }
 
 /// RSTableView
@@ -195,7 +195,7 @@ extension RSTableView {
     /// Hide loading indicator
     public func hideIndicator() {
         emptyDataView.hideLoadingIndicator()
-        emptyDataView.parentStackView.isHidden = (searchResultUpdateDelegate?.getDataSourceCount() ?? 0 > 0)
+        emptyDataView.parentStackView.isHidden = (searchResultUpdateDelegate?.getCount() ?? 0 > 0)
         emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
     }
 }
