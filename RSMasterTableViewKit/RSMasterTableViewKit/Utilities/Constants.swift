@@ -44,7 +44,7 @@ public typealias FilteredDataSource<T> = [T]
 public typealias PullToRefreshHandler = () -> ()
 
 /// Infinite Scrolling
-public typealias InfiniteScrollingHandler = () -> ()
+public typealias InfiniteScrollingHandler = (_ page: UInt) -> ()
 
 /// UISearchBarResult
 public typealias UISearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))

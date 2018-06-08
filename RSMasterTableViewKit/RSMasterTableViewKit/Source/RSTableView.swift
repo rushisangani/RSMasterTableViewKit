@@ -18,6 +18,19 @@ protocol SearchResultUpdateDelegate: class {
     func getCount() -> Int
 }
 
+/// Pagination Parameters to fetch page wise data from server
+public struct PaginationParameters {
+    
+    /// Indicates current page, default is 0
+    var page: UInt = 0
+    
+    /// Number of records to fetch per page, default is 20
+    var limit: UInt = 20
+    
+    /// Init
+    public init() {}
+}
+
 /// RSTableView
 open class RSTableView: UITableView {
     
@@ -43,8 +56,8 @@ open class RSTableView: UITableView {
     /// This is to manage current status of the infinite scrolling
     private var fetchDataStatus: FetchDataStatus = .none
     
-    /// Number of records to fetch for paging
-    public var infiniteScrollingFetchCount: Int = 20
+    /// Pagination Parameters
+    private var paginationParameters: PaginationParameters?
     
     /// Empty data view
     lazy private var emptyDataView: RSEmptyDataView = {
@@ -98,8 +111,9 @@ open class RSTableView: UITableView {
     }
     
     /// Add Infinite Scrolling
-    public func addInfiniteScrolling(fetchCount:Int? = 20 , handler: @escaping InfiniteScrollingHandler) {
-        infiniteScrollingFetchCount = fetchCount!
+    public func addInfiniteScrolling(parameters: PaginationParameters? = PaginationParameters() , handler: @escaping InfiniteScrollingHandler) {
+        
+        self.paginationParameters = paginationParameters!
         infiniteScrollingHanlder = handler
         tableFooterView = footerIndicatorView
         if #available(iOS 10.0, *) {
@@ -263,7 +277,7 @@ extension RSTableView: UITableViewDataSourcePrefetching {
         if let handler = self.infiniteScrollingHanlder {
             footerIndicatorView.startAnimating()
             fetchDataStatus = .started
-            handler()
+            handler(self.paginationParameters?.page ?? 0)
         }
     }
     
@@ -272,9 +286,13 @@ extension RSTableView: UITableViewDataSourcePrefetching {
         return (self.infiniteScrollingHanlder != nil)
     }
     
-    /// updates the flag shouldFetchMoreData
+    /// updates the pagination parameters
     private func updateShouldFetchMoreData(count: Int) {
-        shouldFetchMoreData = (isInfiniteScrollingAdded() && count >= infiniteScrollingFetchCount)
+        guard isInfiniteScrollingAdded() else {
+            shouldFetchMoreData = false
+            return
+        }
+        shouldFetchMoreData = (UInt(count) >= (paginationParameters?.limit)!)
     }
 }
 

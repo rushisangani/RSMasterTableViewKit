@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         // show indicator
         tableView.showIndicator()
         
-        self.fetchDataFromServer { (posts) in
+        self.fetchDataFromServer(url: serverURL) { (posts) in
             self.dataSource?.setData(data: posts)
         }
     }
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
         // add pull to refresh
         tableView.addPullToRefresh {
 
-            self.fetchDataFromServer(completion: { (posts) in
+            self.fetchDataFromServer(url: serverURL, completion: { (posts) in
                 self.dataSource?.setData(data: [])
             })
         }
@@ -77,9 +77,9 @@ class ViewController: UIViewController {
 extension ViewController {
     
     /// fetch data from server
-    func fetchDataFromServer(completion: @escaping ([Post]) -> ()) {
+    func fetchDataFromServer(url: String, completion: @escaping ([Post]) -> ()) {
         
-        Alamofire.request(serverURL).responseJSON { (response) in
+        Alamofire.request(url).responseJSON { (response) in
             if let json = response.result.value, let posts = Mapper<Post>().mapArray(JSONObject: json) {
                 completion(posts)
             }
