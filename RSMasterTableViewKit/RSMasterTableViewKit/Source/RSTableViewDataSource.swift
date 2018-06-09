@@ -62,7 +62,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     
     /// get datasource count
     public var count: Int {
-        return dataSource.count
+        return tableView!.needToFilterResultData() ? filteredDataSource.count : dataSource.count
     }
     
     // MARK: - Initialize

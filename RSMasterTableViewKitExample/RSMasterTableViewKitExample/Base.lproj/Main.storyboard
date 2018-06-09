@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uf0-ee-eVK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uf0-ee-eVK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Contacts-->
+        <!--Comments-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Contacts" id="BYZ-38-t0r" customClass="ViewController" customModule="RSMasterTableViewKitExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Comments" id="BYZ-38-t0r" customClass="DemoViewController" customModule="RSMasterTableViewKitExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -58,7 +58,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Contacts" id="nIF-CO-aZD"/>
+                    <navigationItem key="navigationItem" title="Comments" id="nIF-CO-aZD">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="search" id="ugb-uf-Ezh">
+                            <connections>
+                                <segue destination="BUG-M6-JTv" kind="show" id="I0y-YG-oao"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="ZES-O8-2Z2" id="JaG-EO-PqL"/>
                     </connections>
@@ -66,6 +72,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="573.60000000000002" y="105.69715142428787"/>
+        </scene>
+        <!--Search-->
+        <scene sceneID="pGt-uo-vM3">
+            <objects>
+                <viewController title="Search" id="BUG-M6-JTv" customClass="SearchViewController" customModule="RSMasterTableViewKitExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UrS-V9-QVm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="feN-Qe-n1c" customClass="RSTableView" customModule="RSMasterTableViewKit">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="lMz-Du-AAN" detailTextLabel="L0G-uR-pmD" rowHeight="66" style="IBUITableViewCellStyleSubtitle" id="2Vt-4c-jcu">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="66"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2Vt-4c-jcu" id="DLo-vP-L2s">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lMz-Du-AAN">
+                                                    <rect key="frame" x="15" y="12" width="31.5" height="19.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L0G-uR-pmD">
+                                                    <rect key="frame" x="15" y="34.5" width="47" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iWe-ju-uNo" firstAttribute="trailing" secondItem="feN-Qe-n1c" secondAttribute="trailing" id="0qa-T5-Z7v"/>
+                            <constraint firstItem="feN-Qe-n1c" firstAttribute="top" secondItem="UrS-V9-QVm" secondAttribute="top" id="Q0j-hW-12y"/>
+                            <constraint firstItem="iWe-ju-uNo" firstAttribute="bottom" secondItem="feN-Qe-n1c" secondAttribute="bottom" id="XLW-Fi-BcA"/>
+                            <constraint firstItem="feN-Qe-n1c" firstAttribute="leading" secondItem="UrS-V9-QVm" secondAttribute="leading" id="qVS-Si-BrU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="iWe-ju-uNo"/>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="feN-Qe-n1c" id="GIo-c7-KBV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0d0-cB-9be" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1290" y="110"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="JaH-wF-aUt">

@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		A294F79120530F4B00195712 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F79020530F4B00195712 /* AppDelegate.swift */; };
-		A294F79320530F4B00195712 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F79220530F4B00195712 /* ViewController.swift */; };
+		A294F79320530F4B00195712 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F79220530F4B00195712 /* DemoViewController.swift */; };
 		A294F79620530F4B00195712 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A294F79420530F4B00195712 /* Main.storyboard */; };
 		A294F79820530F4B00195712 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A294F79720530F4B00195712 /* Assets.xcassets */; };
 		A294F79B20530F4B00195712 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A294F79920530F4B00195712 /* LaunchScreen.storyboard */; };
 		A294F7D02053105100195712 /* RSMasterTableViewKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; };
 		A294F7D12053105100195712 /* RSMasterTableViewKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2C648CC20CBE09C0011C0DD /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C648CB20CBE09C0011C0DD /* Comment.swift */; };
+		A2C648CF20CBED270011C0DD /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C648CE20CBED270011C0DD /* SearchViewController.swift */; };
 		A2FC87AD205D8565000DB9EE /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */; };
 		F19FFB7B5A44B231998B8A79 /* Pods_RSMasterTableViewKitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */; };
 /* End PBXBuildFile section */
@@ -38,13 +39,14 @@
 		9DE429C2D9D4A9A8C622E3C0 /* Pods-RSMasterTableViewKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSMasterTableViewKitExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample.release.xcconfig"; sourceTree = "<group>"; };
 		A294F78D20530F4B00195712 /* RSMasterTableViewKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSMasterTableViewKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A294F79020530F4B00195712 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A294F79220530F4B00195712 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A294F79220530F4B00195712 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 		A294F79520530F4B00195712 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A294F79720530F4B00195712 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A294F79A20530F4B00195712 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A294F79C20530F4B00195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2C648CB20CBE09C0011C0DD /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		A2C648CE20CBED270011C0DD /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
 		B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RSMasterTableViewKitExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -93,8 +95,9 @@
 			isa = PBXGroup;
 			children = (
 				A294F79020530F4B00195712 /* AppDelegate.swift */,
-				A294F79220530F4B00195712 /* ViewController.swift */,
-				A2C648CB20CBE09C0011C0DD /* Comment.swift */,
+				A294F79220530F4B00195712 /* DemoViewController.swift */,
+				A2C648CE20CBED270011C0DD /* SearchViewController.swift */,
+				A2C648CD20CBEC670011C0DD /* Models */,
 				A294F79420530F4B00195712 /* Main.storyboard */,
 				A294F79720530F4B00195712 /* Assets.xcassets */,
 				A294F79920530F4B00195712 /* LaunchScreen.storyboard */,
@@ -102,6 +105,14 @@
 				A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */,
 			);
 			path = RSMasterTableViewKitExample;
+			sourceTree = "<group>";
+		};
+		A2C648CD20CBEC670011C0DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A2C648CB20CBE09C0011C0DD /* Comment.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		F15F0032BB55E809D3A524F4 /* Pods */ = {
@@ -245,7 +256,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A294F79320530F4B00195712 /* ViewController.swift in Sources */,
+				A2C648CF20CBED270011C0DD /* SearchViewController.swift in Sources */,
+				A294F79320530F4B00195712 /* DemoViewController.swift in Sources */,
 				A2C648CC20CBE09C0011C0DD /* Comment.swift in Sources */,
 				A294F79120530F4B00195712 /* AppDelegate.swift in Sources */,
 				A2FC87AD205D8565000DB9EE /* MyTableViewCell.swift in Sources */,

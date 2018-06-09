@@ -326,7 +326,7 @@ extension RSTableView {
     }
     
     /// Checks if filter result by search string
-    private func needToFilterResultData() -> Bool {
+    func needToFilterResultData() -> Bool {
         if let searchViewController = searchController, !searchViewController.searchString.isEmpty {
             return true
         }

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  DemoViewController.swift
 //  RSMasterTableViewKitExample
 //
 //  Created by Rushi Sangani on 10/03/18.
@@ -15,7 +15,7 @@ let cellIdentifier = "cell"
 let defaultFetchCount = 100
 let serverURL = "https://jsonplaceholder.typicode.com/comments"
 
-class ViewController: UIViewController {
+class DemoViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet weak var tableView: RSTableView!
@@ -92,7 +92,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension UIViewController {
     
     /// fetch data from server
     func fetchDataFromServer(url: String, completion: @escaping ([Comment]) -> ()) {
