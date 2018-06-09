@@ -8,8 +8,8 @@
 
 import UIKit
 
-/// SearchResultUpdateDelegate to get filtered data based on search text
-protocol SearchResultUpdateDelegate: class {
+/// TableviewDataSourceDelegate to get values of RSTableViewDataSource
+protocol RSTableviewDataSourceDelegate: class {
     
     /// To be called when user start typing on search box or to filter data based on search text
     func getResultForSearchString(_ text: String)
@@ -21,14 +21,20 @@ protocol SearchResultUpdateDelegate: class {
 /// Pagination Parameters to fetch page wise data from server
 public struct PaginationParameters {
     
-    /// Indicates current page, default is 0
-    var page: UInt = 0
+    /// Indicates current page, default is 1
+    public var page: UInt = 1
     
     /// Number of records to fetch per page, default is 20
-    var limit: UInt = 20
+    public var size: UInt = 20
     
     /// Init
     public init() {}
+    
+    /// Init with values
+    public init(page: UInt, size: UInt) {
+        self.page = page
+        self.size = size
+    }
 }
 
 /// RSTableView
@@ -57,7 +63,7 @@ open class RSTableView: UITableView {
     private var fetchDataStatus: FetchDataStatus = .none
     
     /// Pagination Parameters
-    private var paginationParameters: PaginationParameters?
+    public var paginationParameters: PaginationParameters?
     
     /// Empty data view
     lazy private var emptyDataView: RSEmptyDataView = {
@@ -71,8 +77,8 @@ open class RSTableView: UITableView {
     /// SearchController
     private var searchController: RSSearchController?
     
-    /// SearchResult Update Delegate
-    weak var searchResultUpdateDelegate: SearchResultUpdateDelegate?
+    /// RSTableViewDataSource delegate
+    weak var tableViewDataSourceDelegate: RSTableviewDataSourceDelegate!
     
     /// FooterView
     lazy private var footerIndicatorView: UIActivityIndicatorView = {
@@ -127,14 +133,14 @@ open class RSTableView: UITableView {
         
         // apply attributes
         if let searchBarAttributes = attributes {
-            searchController?.searchBarAttributes = searchBarAttributes
+            searchController?.setSearchBarAttributes(searchBarAttributes)
         }
         
         // search handler
         searchController?.didSearch = { [weak self] (searchText) in
             
             // show search result
-            self?.searchResultUpdateDelegate?.getResultForSearchString(searchText)
+            self?.tableViewDataSourceDelegate.getResultForSearchString(searchText)
         }
     }
 }
@@ -146,33 +152,37 @@ extension RSTableView: RSTableViewDataSourceUpdate {
     /// new data updated in dataSource
     func didSetDataSource(count: Int) {
         
-        // update fetch more data flag
-        updateShouldFetchMoreData(count: count)
-        
-        // reload data if no search
-        guard needToFilterResultData() else {
-            reloadTableView()
+        // check if search text is present
+        if needToFilterResultData() {
+            self.tableViewDataSourceDelegate.getResultForSearchString((searchController?.searchString)!)
             return
         }
         
-        // show result by search text
-        self.searchResultUpdateDelegate?.getResultForSearchString((searchController?.searchString)!)
+        // reload tableview
+        reloadTableView {
+            
+            // update fetch more data flag
+            self.updateShouldFetchMoreData(count: count)
+        }
     }
     
     /// new data added in dataSource
     func didAddedToDataSource(start: Int, withTotalCount count: Int) {
+        didSetDataSource(count: count)
         
-        // update fetch more data flag
-        updateShouldFetchMoreData(count: count)
-        
-        // check if search text is present
-        if needToFilterResultData() {
-            self.searchResultUpdateDelegate?.getResultForSearchString((searchController?.searchString)!)
-            return
-        }
-        
+        /*
         // add rows to tableView
-        addRows(from: start, to: start + count, inSection: 0)
+        addRows(from: start, to: start + count, inSection: 0) {
+            
+            // scroll to new row
+            if start < self.tableViewDataSourceDelegate.getCount() {
+                self.scrollToRow(at: IndexPath(row: start, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+            }
+            
+            // update fetch more data flag
+            self.updateShouldFetchMoreData(count: count)
+        }
+        */
     }
     
     /// data updated at specified index in dataSource
@@ -188,7 +198,6 @@ extension RSTableView: RSTableViewDataSourceUpdate {
     /// all data removed from dataSource
     func didRemovedData() {
         reloadTableView()
-        fetchDataStatus = .none
     }
     
     /// reload
@@ -209,7 +218,7 @@ extension RSTableView {
     /// Hide loading indicator
     public func hideIndicator() {
         emptyDataView.hideLoadingIndicator()
-        emptyDataView.parentStackView.isHidden = (searchResultUpdateDelegate?.getCount() ?? 0 > 0)
+        emptyDataView.parentStackView.isHidden = (tableViewDataSourceDelegate.getCount() > 0)
         emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
     }
 }
@@ -222,9 +231,19 @@ extension RSTableView {
     @objc private func handlePullToRefresh() {
         searchController?.searchController.searchBar.endEditing(true)
         
+        // reset
+        resetBeforePullToReresh()
+        
         if let handler = pullToRefreshHandler {
             handler()
         }
+    }
+    
+    /// This will reset flags and hides animations
+    private func resetBeforePullToReresh() {
+        stopAnimations()
+        shouldFetchMoreData = false
+        paginationParameters?.page = 1
     }
     
     /// Ends pull to refresh animating
@@ -249,23 +268,18 @@ extension RSTableView {
     }
 }
 
-// MARK: - SearchBar
-
-extension RSTableView {
-    
-    /// set searchbar atttibutes
-    public func setSearchbarAttributes(attributes: SearchBarAttributes) {
-        searchController?.searchBarAttributes = attributes
-    }
-}
-
 // MARK: - Infinite Scrolling and Prefetch
 
 extension RSTableView: UITableViewDataSourcePrefetching {
     
     // prefetch rows
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard indexPaths.count > 0, shouldFetchMoreData else { return }
+        
+        guard indexPaths.count > 0,
+              indexPaths.last?.row == tableViewDataSourceDelegate.getCount()-1,
+              shouldFetchMoreData
+        else { return }
+        
         self.fetchMoreData()
     }
     
@@ -274,10 +288,16 @@ extension RSTableView: UITableViewDataSourcePrefetching {
         if fetchDataStatus == .started { return }
         
         // fetch next page data
-        if let handler = self.infiniteScrollingHanlder {
+        if let handler = self.infiniteScrollingHanlder, let parameters = paginationParameters {
             footerIndicatorView.startAnimating()
             fetchDataStatus = .started
-            handler(self.paginationParameters?.page ?? 0)
+            
+            // calculate next page
+            let page = (tableViewDataSourceDelegate.getCount() / Int(parameters.size)) + 1
+            paginationParameters?.page = UInt(page)
+            
+            // calling handler
+            handler(self.paginationParameters?.page ?? 1)
         }
     }
     
@@ -292,7 +312,7 @@ extension RSTableView: UITableViewDataSourcePrefetching {
             shouldFetchMoreData = false
             return
         }
-        shouldFetchMoreData = (UInt(count) >= (paginationParameters?.limit)!)
+        shouldFetchMoreData = (UInt(count) >= (paginationParameters?.size)!)
     }
 }
 
@@ -321,7 +341,7 @@ extension RSTableView {
     }
     
     /// reload tableview
-    private func reloadTableView() {
+    private func reloadTableView(completion: (() -> ())? = nil) {
         DispatchQueue.main.async {
             
             // stop animations
@@ -334,11 +354,16 @@ extension RSTableView {
             
             // update fetch data status
             self.fetchDataStatus = .completed
+            
+            // call completion
+            if let completion = completion {
+                completion()
+            }
         }
     }
     
     /// This function adds new rows to tableview
-    private func addRows(from: Int, to: Int, inSection section:Int) {
+    private func addRows(from: Int, to: Int, inSection section:Int, completion: (() -> ())? = nil) {
         
         var indexPaths = [IndexPath]()
         for i in from..<to {
@@ -370,6 +395,11 @@ extension RSTableView {
             
             // update fetch data status
             self.fetchDataStatus = .completed
+            
+            // call completion
+            if let completion = completion {
+                completion()
+            }
         }
     }
     

@@ -1,22 +1,23 @@
 //
-//  Post.swift
+//  Comment.swift
 //  RSMasterTableViewKitExample
 //
-//  Created by Rushi on 07/06/18.
+//  Created by Rushi Sangani on 09/06/18.
 //  Copyright © 2018 Rushi Sangani. All rights reserved.
 //
 
 import Foundation
 import ObjectMapper
 
-/// Post Model
-struct Post: Mappable {
+/// Comment Model
+struct Comment: Mappable {
     
     // MARK: - Properties
     
-    var userId: UInt = 0
+    var postId: UInt = 0
     var id: Int = 0
-    var title: String = ""
+    var name: String = ""
+    var email: String = ""
     var body: String = ""
     
     /// init
@@ -25,9 +26,10 @@ struct Post: Mappable {
     
     /// mapping
     mutating func mapping(map: Map) {
-        userId <- map["userId"]
+        postId <- map["postId"]
         id <- map["id"]
-        title <- map["title"]
+        name <- map["name"]
+        email <- map["email"]
         body <- map["body"]
     }
 }

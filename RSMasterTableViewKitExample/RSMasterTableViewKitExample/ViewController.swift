@@ -12,8 +12,8 @@ import Alamofire
 import ObjectMapper
 
 let cellIdentifier = "cell"
-let defaultPostFetchCount = 20
-let serverURL = "https://jsonplaceholder.typicode.com/posts"
+let defaultFetchCount = 100
+let serverURL = "https://jsonplaceholder.typicode.com/comments"
 
 class ViewController: UIViewController {
 
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: RSTableView!
     
     // MARK: - Properties
-    var dataSource: RSTableViewDataSource<Post>?
+    var dataSource: RSTableViewDataSource<Comment>?
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -35,53 +35,71 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // show indicator
-        tableView.showIndicator()
+        tableView.showIndicator(title: NSAttributedString(string: "LOADING"), tintColor: UIColor.darkGray)
         
-        self.fetchDataFromServer(url: serverURL) { (posts) in
-            self.dataSource?.setData(data: posts)
+        // fetch and display data
+        self.fetchDataFromServer(url: getFetchURLForPage(1)) { (comments) in
+            self.dataSource?.setData(data: comments)
         }
     }
     
+    // MARK: - TableView Setup
     func setupTableView() {
         
         // setup tableview and data source
-        dataSource = RSTableViewDataSource<Post>(tableView: tableView, identifier: cellIdentifier, cellConfiguration: { (cell, post, indexPath) in
-            cell.textLabel?.text = post.title
-            cell.detailTextLabel?.text = post.body
+        dataSource = RSTableViewDataSource<Comment>(tableView: tableView, identifier: cellIdentifier, cellConfiguration: { (cell, comment, indexPath) in
+            
+            cell.textLabel?.text = "\(indexPath.row+1). \(comment.email)"
+            cell.detailTextLabel?.text = comment.body
         })
         
-        // show empty data view when no data
-        tableView.setEmptyDataView(title: NSAttributedString(string: "NO POSTS AVAILABLE"), description: NSAttributedString(string: "Posts that you have uploaded will appear here."), image: #imageLiteral(resourceName: "posts-nodata"))
+        // show empty data view when no data available
+        tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description: NSAttributedString(string: "Comments that you have posted will appear here."), image: #imageLiteral(resourceName: "posts-nodata"))
+        
+        // pagination parameters
+        tableView.paginationParameters = PaginationParameters(page: 1, size: UInt(defaultFetchCount))
         
         // add pull to refresh
         tableView.addPullToRefresh {
 
-            self.fetchDataFromServer(url: serverURL, completion: { (posts) in
-                self.dataSource?.setData(data: [])
+            self.fetchDataFromServer(url: self.getFetchURLForPage(1), completion: { (comments) in
+                
+                // set data
+                self.dataSource?.setData(data: comments)
             })
         }
         
         // pull to refresh tint color and text
-        //tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
+        tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
         
-        // show search bar
-        //tableView.addSearchBar(viewController: self)
-        
-        // search result
-        //dataSource?.searchResultHandler = { (searchText, data) in
-        //    return data.filter({ $0.title.lowercased().starts(with: searchText.lowercased()) })
-        //}
+        // infinite scrolling
+        tableView.addInfiniteScrolling { (page) in
+            
+            // get url for next page
+            let url = self.getFetchURLForPage(page)
+            
+            self.fetchDataFromServer(url: url, completion: { (comments) in
+                
+                // append new data
+                self.dataSource?.appendData(data: comments)
+            })
+        }
+    }
+    
+    /// get url
+    func getFetchURLForPage(_ page: UInt) -> String {
+        return "\(serverURL)?_page=\(page)&_limit=\(tableView.paginationParameters?.size ?? UInt(defaultFetchCount))"
     }
 }
 
 extension ViewController {
     
     /// fetch data from server
-    func fetchDataFromServer(url: String, completion: @escaping ([Post]) -> ()) {
+    func fetchDataFromServer(url: String, completion: @escaping ([Comment]) -> ()) {
         
         Alamofire.request(url).responseJSON { (response) in
-            if let json = response.result.value, let posts = Mapper<Post>().mapArray(JSONObject: json) {
-                completion(posts)
+            if let json = response.result.value, let comments = Mapper<Comment>().mapArray(JSONObject: json) {
+                completion(comments)
             }
         }
     }

@@ -77,7 +77,7 @@ open class RSSearchController: NSObject {
         
         // set attributes
         searchController.searchBar.tintColor = viewController.navigationController?.navigationBar.tintColor
-        setSearchBarAttributes()
+        setSearchBarAttributes(searchBarAttributes)
     }
     
     /// search text handler
@@ -98,7 +98,7 @@ extension RSSearchController: UISearchResultsUpdating, UISearchControllerDelegat
     }
     
     public func willPresentSearchController(_ searchController: UISearchController) {
-        setSearchBarAttributes()
+        setSearchBarAttributes(searchBarAttributes)
     }
 }
 
@@ -106,21 +106,21 @@ extension RSSearchController: UISearchResultsUpdating, UISearchControllerDelegat
 extension RSSearchController {
     
     /// set search bar customization attributes
-    func setSearchBarAttributes() {
+    func setSearchBarAttributes(_ attributes: SearchBarAttributes) {
         
-        searchController.searchBar.tintColor = searchBarAttributes.tintColor
+        searchController.searchBar.tintColor = attributes.tintColor
         
         // cancel button
-        setCancelButtonTItle(searchBarAttributes.cancelButtonTitle)
+        setCancelButtonTItle(attributes.cancelButtonTitle)
         
         // textField
         if let textField = searchController.searchBar.value(forKey: keySearchField) as? UITextField {
             
-            textField.attributedPlaceholder = searchBarAttributes.attributedPlaceHolder
-            textField.textColor = searchBarAttributes.textColor
+            textField.attributedPlaceholder = attributes.attributedPlaceHolder
+            textField.textColor = attributes.textColor
             
             if let backgroundview = textField.subviews.first {
-                backgroundview.backgroundColor = searchBarAttributes.backgroundColor
+                backgroundview.backgroundColor = attributes.backgroundColor
                 backgroundview.layer.cornerRadius = 10;
                 backgroundview.clipsToBounds = true;
             }
@@ -129,14 +129,14 @@ extension RSSearchController {
             if let searchImageView = textField.leftView as? UIImageView, let img = searchImageView.image {
                 
                 let templateImage = img.withRenderingMode(.alwaysTemplate)
-                searchImageView.tintColor = searchBarAttributes.iconsColor
+                searchImageView.tintColor = attributes.iconsColor
                 searchImageView.image = templateImage
             }
             
             // clear button
             if let clearButton = textField.value(forKey: keyClearButton) as? UIButton {
                 clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
-                clearButton.tintColor = searchBarAttributes.iconsColor
+                clearButton.tintColor = attributes.iconsColor
             }
         }
     }

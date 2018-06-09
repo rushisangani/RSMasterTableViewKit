@@ -71,7 +71,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
         super.init()
         
         tableView.dataSource = self
-        tableView.searchResultUpdateDelegate = self
+        tableView.tableViewDataSourceDelegate = self
         dataSourceUpdateDelegate = tableView
         
         self.tableView = tableView
@@ -149,9 +149,9 @@ extension RSTableViewDataSource {
     }
 }
 
-// MARK:- SearchResultUpdateDelegate
+// MARK:- RSTableviewDataSourceDelegate
 
-extension RSTableViewDataSource: SearchResultUpdateDelegate {
+extension RSTableViewDataSource: RSTableviewDataSourceDelegate {
     
     /// called to be filter result
     func getResultForSearchString(_ text: String) {
