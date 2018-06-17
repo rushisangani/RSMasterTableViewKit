@@ -248,11 +248,15 @@ extension RSTableView {
     
     /// Ends pull to refresh animating
     public func endPullToRefresh() {
-        pullToRefresh.endRefreshing()
+        if self.isPullToRefreshAnimating() {
+            DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                self.pullToRefresh.endRefreshing()
+            })
+        }
     }
     
     // pull to refresh customization
-    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString) {
+    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString? = nil) {
         pullToRefresh.tintColor = tintColor
         pullToRefresh.attributedTitle = attributedText
     }
@@ -335,7 +339,6 @@ extension RSTableView {
     
     /// stop animations: hide refresh animation and indicator
     private func stopAnimations() {
-        if self.isPullToRefreshAnimating() { self.endPullToRefresh() }
         footerIndicatorView.stopAnimating()
         self.hideIndicator()
     }
@@ -346,6 +349,9 @@ extension RSTableView {
             
             // stop animations
             self.stopAnimations()
+            
+            // end pull to refresh
+            self.endPullToRefresh()
             
             // reload without animation
             UIView.setAnimationsEnabled(false)
@@ -374,6 +380,9 @@ extension RSTableView {
             
             // stop animations
             self.stopAnimations()
+            
+            // end pull to refresh
+            self.endPullToRefresh()
             
             // insert without animation
             UIView.setAnimationsEnabled(false)

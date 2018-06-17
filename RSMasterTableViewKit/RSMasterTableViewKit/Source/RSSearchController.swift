@@ -70,7 +70,9 @@ open class RSSearchController: NSObject {
         viewController.definesPresentationContext = true
         
         if #available(iOS 11.0, *) {
+            viewController.navigationController?.navigationBar.prefersLargeTitles = true
             viewController.navigationItem.searchController = searchController
+            viewController.navigationItem.hidesSearchBarWhenScrolling = false
         } else {
             tableView.tableHeaderView = searchController.searchBar
         }
