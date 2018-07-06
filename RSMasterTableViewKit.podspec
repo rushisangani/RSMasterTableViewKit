@@ -21,12 +21,13 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "10.0"
 
-  s.source       = { :git => "https://github.com/rushisangani/RSMasterTableViewKit.git", :tag => "s.version" }
+  s.source       = { :git => "https://github.com/rushisangani/RSMasterTableViewKit.git", :tag => s.version }
 
 
   s.source_files  = "RSMasterTableViewKit", "RSMasterTableViewKit/**/*.{swift}"
 
   s.requires_arc = true
+  s.swift_version = "4.0"
   s.pod_target_xcconfig = { "SWIFT_VERSION" => "4" }
 
 end
