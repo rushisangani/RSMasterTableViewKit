@@ -1,0 +1,11 @@
+version: "Apple Swift version 4.1.2 (swiftlang-902.0.54 clang-902.0.39.2)"
+options: "23a53f2a00cb74923b7eb7450b4a10c5"
+build_time: [1529405628, 711236000]
+inputs:
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Source/RSTableViewCell.swift": [1521438831, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Source/RSSearchController.swift": [1529402945, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Source/RSTableView.swift": [1529402945, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Source/RSTableViewDataSource.swift": [1528953070, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Utilities/RSMasterTableViewExtensions.swift": [1521438831, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Utilities/Constants.swift": [1528434763, 0]
+  "/Rushi Sangani/GitHub/RSMasterTableViewKit/RSMasterTableViewKit/RSMasterTableViewKit/Source/RSEmptyDataView.swift": [1528354024, 0]

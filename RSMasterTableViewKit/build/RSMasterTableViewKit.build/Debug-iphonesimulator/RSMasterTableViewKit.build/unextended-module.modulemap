@@ -1,0 +1,10 @@
+framework module RSMasterTableViewKit {
+  umbrella header "RSMasterTableViewKit.h"
+
+  export *
+  module * { export * }
+}
+
+module RSMasterTableViewKit.__Swift {
+    exclude header "RSMasterTableViewKit-Swift.h"
+}
