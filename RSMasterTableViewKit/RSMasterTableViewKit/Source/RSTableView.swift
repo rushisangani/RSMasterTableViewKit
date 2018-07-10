@@ -221,6 +221,16 @@ extension RSTableView {
         emptyDataView.parentStackView.isHidden = (tableViewDataSourceDelegate.getCount() > 0)
         emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
     }
+    
+    /// Hides Loading Indicator, PullToRefresh, Load more
+    public func hideAllAnimations() {
+        
+        // stop animations
+        self.stopAnimations()
+        
+        // end pull to refresh
+        self.endPullToRefresh()
+    }
 }
 
 // MARK: - RefreshControl
@@ -347,11 +357,8 @@ extension RSTableView {
     private func reloadTableView(completion: (() -> ())? = nil) {
         DispatchQueue.main.async {
             
-            // stop animations
-            self.stopAnimations()
-            
-            // end pull to refresh
-            self.endPullToRefresh()
+            // hide animations
+            self.hideAllAnimations()
             
             // reload without animation
             UIView.setAnimationsEnabled(false)
@@ -378,11 +385,8 @@ extension RSTableView {
         
         DispatchQueue.main.async {
             
-            // stop animations
-            self.stopAnimations()
-            
-            // end pull to refresh
-            self.endPullToRefresh()
+            // hide animations
+            self.hideAllAnimations()
             
             // insert without animation
             UIView.setAnimationsEnabled(false)
