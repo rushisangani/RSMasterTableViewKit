@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "RSMasterTableViewKit"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "A comprehensive UITableView which handles everything that you need."
 
   s.description  = <<-DESC
@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
 
 
   s.source_files  = "RSMasterTableViewKit", "RSMasterTableViewKit/**/*.{swift}"
+  s.resources     = "RSMasterTableViewKit/**/*.{xib}"
 
   s.requires_arc = true
   s.swift_version = "4.0"
