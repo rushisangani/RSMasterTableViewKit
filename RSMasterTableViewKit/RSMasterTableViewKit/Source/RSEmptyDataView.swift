@@ -26,6 +26,7 @@ open class RSEmptyDataView: UIView {
     open override func awakeFromNib() {
         super.awakeFromNib()
         activityIndicator.stopAnimating()
+        parentStackView.isHidden = true
     }
     
     // MARK: - Public

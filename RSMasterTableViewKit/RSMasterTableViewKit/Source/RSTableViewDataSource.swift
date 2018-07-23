@@ -24,7 +24,7 @@ protocol RSTableViewDataSourceUpdate: class {
     func didDeletedDataDataSourceAt(index: Int)
     
     /// To be called when all data is removed from dataSource
-    func didRemovedData()
+    func didRemovedData(showEmptyState: Bool)
     
     /// To be called when dataSourced is updated
     func reload()
@@ -143,9 +143,9 @@ extension RSTableViewDataSource {
     }
     
     /// clear all data
-    public func clearData() {
+    public func clearData(showEmptyState: Bool = true) {
         self.dataSource = []
-        self.dataSourceUpdateDelegate?.didRemovedData()
+        self.dataSourceUpdateDelegate?.didRemovedData(showEmptyState: showEmptyState)
     }
 }
 

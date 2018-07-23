@@ -21,8 +21,11 @@ protocol RSTableviewDataSourceDelegate: class {
 /// Pagination Parameters to fetch page wise data from server
 public struct PaginationParameters {
     
-    /// Indicates current page, default is 1
-    public var page: UInt = 1
+    /// Indicates starting page, default is 0
+    public var startPage: UInt = 0
+    
+    /// Indicates current page
+    var currentPage: UInt = 0
     
     /// Number of records to fetch per page, default is 20
     public var size: UInt = 20
@@ -32,7 +35,9 @@ public struct PaginationParameters {
     
     /// Init with values
     public init(page: UInt, size: UInt) {
-        self.page = page
+        
+        self.startPage = page
+        self.currentPage = page
         self.size = size
     }
 }
@@ -119,7 +124,7 @@ open class RSTableView: UITableView {
     /// Add Infinite Scrolling
     public func addInfiniteScrolling(parameters: PaginationParameters? = PaginationParameters() , handler: @escaping InfiniteScrollingHandler) {
         
-        self.paginationParameters = paginationParameters!
+        self.paginationParameters = parameters
         infiniteScrollingHanlder = handler
         tableFooterView = footerIndicatorView
         if #available(iOS 10.0, *) {
@@ -161,6 +166,9 @@ extension RSTableView: RSTableViewDataSourceUpdate {
         // reload tableview
         reloadTableView {
             
+            // update empty data set
+            self.updateEmptyDataState()
+            
             // update fetch more data flag
             self.updateShouldFetchMoreData(count: count)
         }
@@ -196,8 +204,14 @@ extension RSTableView: RSTableViewDataSourceUpdate {
     }
 
     /// all data removed from dataSource
-    func didRemovedData() {
-        reloadTableView()
+    func didRemovedData(showEmptyState: Bool) {
+        resetPagination()
+        reload()
+        
+        // update empty data set, if true
+        if showEmptyState {
+            self.updateEmptyDataState()
+        }
     }
     
     /// reload
@@ -217,9 +231,17 @@ extension RSTableView {
     
     /// Hide loading indicator
     public func hideIndicator() {
-        emptyDataView.hideLoadingIndicator()
-        emptyDataView.parentStackView.isHidden = (tableViewDataSourceDelegate.getCount() > 0)
-        emptyDataView.isHidden = emptyDataView.parentStackView.isHidden
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+            self.emptyDataView.hideLoadingIndicator()
+        }
+    }
+    
+    /// Show empty state
+    private func updateEmptyDataState() {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+            self.emptyDataView.parentStackView.isHidden = (self.tableViewDataSourceDelegate.getCount() > 0)
+            self.emptyDataView.isHidden = self.emptyDataView.parentStackView.isHidden
+        }
     }
     
     /// Hides Loading Indicator, PullToRefresh, Load more
@@ -252,8 +274,7 @@ extension RSTableView {
     /// This will reset flags and hides animations
     private func resetBeforePullToReresh() {
         stopAnimations()
-        shouldFetchMoreData = false
-        paginationParameters?.page = 1
+        resetPagination()
     }
     
     /// Ends pull to refresh animating
@@ -307,11 +328,11 @@ extension RSTableView: UITableViewDataSourcePrefetching {
             fetchDataStatus = .started
             
             // calculate next page
-            let page = (tableViewDataSourceDelegate.getCount() / Int(parameters.size)) + 1
-            paginationParameters?.page = UInt(page)
+            //let page = (tableViewDataSourceDelegate.getCount() / Int(parameters.size)) + 1
+            paginationParameters?.currentPage = parameters.currentPage+1
             
             // calling handler
-            handler(self.paginationParameters?.page ?? 1)
+            handler(self.paginationParameters?.currentPage ?? parameters.startPage)
         }
     }
     
@@ -327,6 +348,15 @@ extension RSTableView: UITableViewDataSourcePrefetching {
             return
         }
         shouldFetchMoreData = (UInt(count) >= (paginationParameters?.size)!)
+    }
+    
+    /// reset current page
+    private func resetPagination() {
+        
+        shouldFetchMoreData = false
+        if let pagination = paginationParameters {
+            paginationParameters?.currentPage = pagination.startPage
+        }
     }
 }
 
