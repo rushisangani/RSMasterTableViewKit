@@ -64,6 +64,7 @@ open class RSEmptyDataView: UIView {
     /// Show loading indicator
     func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
         self.parentStackView.isHidden = true
+        activityIndicator.isHidden = false
         
         // loading indicator
         if let color = tintColor {

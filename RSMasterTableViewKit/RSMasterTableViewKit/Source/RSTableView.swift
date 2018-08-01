@@ -226,21 +226,22 @@ extension RSTableView {
     
     /// Show loading indicator
     public func showIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
-        emptyDataView.showLoadingIndicator(title: title)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+            self.emptyDataView.showLoadingIndicator(title: title)
+        }
     }
     
     /// Hide loading indicator
     public func hideIndicator() {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.0) {
             self.emptyDataView.hideLoadingIndicator()
         }
     }
     
     /// Show empty state
     private func updateEmptyDataState() {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.0) {
             self.emptyDataView.parentStackView.isHidden = (self.tableViewDataSourceDelegate.getCount() > 0)
-            self.emptyDataView.isHidden = self.emptyDataView.parentStackView.isHidden
         }
     }
     

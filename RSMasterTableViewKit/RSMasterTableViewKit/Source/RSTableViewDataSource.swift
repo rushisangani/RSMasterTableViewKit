@@ -60,6 +60,11 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// SearchBar Result Handler
     public var searchResultHandler: UISearchBarResult<T>?
     
+    /// get datasource array
+    public var array: FilteredDataSource<T> {
+        return Array(arrayLiteral: self.filteredDataSource) as! FilteredDataSource
+    }
+    
     /// get datasource count
     public var count: Int {
         return tableView!.needToFilterResultData() ? filteredDataSource.count : dataSource.count
