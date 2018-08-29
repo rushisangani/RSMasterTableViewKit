@@ -26,11 +26,7 @@ class Request {
     /// Response Keypath
     var responeKeyPath: String?
     
-    /// default headers
-    var defaultHeaders = DefaultHeader()
-    
     // MARK: - Init
-    
     init(url: String, method: HTTPMethod, headers: [String: String]? = nil, parameters: [String: Any]? = nil, responeKeyPath: String? = nil) {
         self.method = method
         self.url = url

@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// JSON Resposne
+/// JSON Response
 typealias JSONResponse = ((Any) -> ())
 
 /// JSONRequest

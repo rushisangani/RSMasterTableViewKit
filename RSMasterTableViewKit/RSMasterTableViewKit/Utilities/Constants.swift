@@ -26,10 +26,7 @@
 import Foundation
 import UIKit
 
-/// TableView Fetch More Data States
-public enum FetchDataStatus {
-    case none, started, completed
-}
+/**************** typealias ***************/
 
 /// UITableViewCellConfiguration
 public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())

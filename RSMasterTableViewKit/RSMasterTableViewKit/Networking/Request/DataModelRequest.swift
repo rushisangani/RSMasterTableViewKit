@@ -8,16 +8,16 @@
 
 import Foundation
 
-/// DataResponse
-typealias DataResponse<T> = ((T) -> ())
+/// DataModelResponse
+typealias DataModelResponse<T> = ((T) -> ())
 
-/// DataRequest
-class DataRequest<T: Codable>: Request {
+/// DataModelRequest
+class DataModelRequest<T: Codable>: Request {
     
     /// Execute request
-    func execute(success: @escaping DataResponse<T>, failure: ((ResponseError) -> ())? = nil) {
+    func execute(success: @escaping DataModelResponse<T>, failure: ((ResponseError) -> ())? = nil) {
         
-        NetworkManager.shared.execute(request: self, responseType: .data, success: { (response) in
+        NetworkManager.shared.execute(request: self, responseType: .dataModel, success: { (response) in
             
             // convert to models
             if let data = (response as? Data) {
@@ -29,10 +29,18 @@ class DataRequest<T: Codable>: Request {
 }
 
 // MARK: - Private
-extension DataRequest {
+extension DataModelRequest {
     
     /// Convert data to specified objects
     private func convertDataToObjects(_ data: Data, success: @escaping ((T) -> ()), failure: ((ResponseError) -> ())?) {
+        
+        do {
+            guard let result = try? JSONDecoder().decode(T.self, from: data) else {
+                return
+            }
+        } catch let error {
+            failure(ResponseError(error, ErrorInJSONParsing))
+        }
         
         // convert to specified type
         let result = try? JSONDecoder().decode(T.self, from: data)

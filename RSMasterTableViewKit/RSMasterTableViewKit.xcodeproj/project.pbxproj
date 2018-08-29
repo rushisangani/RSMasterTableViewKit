@@ -11,11 +11,11 @@
 		865D11492136C129007D8C47 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11482136C129007D8C47 /* Reachability.swift */; };
 		865D114B2136C1D2007D8C47 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */; };
 		865D11532136C399007D8C47 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114D2136C399007D8C47 /* NetworkManager.swift */; };
-		865D11542136C399007D8C47 /* DefaultHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114E2136C399007D8C47 /* DefaultHeader.swift */; };
 		865D11552136C399007D8C47 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11502136C399007D8C47 /* Request.swift */; };
-		865D11562136C399007D8C47 /* DataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11512136C399007D8C47 /* DataRequest.swift */; };
+		865D11562136C399007D8C47 /* DataModelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11512136C399007D8C47 /* DataModelRequest.swift */; };
 		865D11572136C399007D8C47 /* JSONRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11522136C399007D8C47 /* JSONRequest.swift */; };
 		865D11592136C41A007D8C47 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11582136C41A007D8C47 /* Enums.swift */; };
+		A28B75792136FF9C00254475 /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28B75782136FF9C00254475 /* NetworkConstants.swift */; };
 		A294F7C220530FD800195712 /* RSMasterTableViewKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A294F7C020530FD800195712 /* RSMasterTableViewKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A294F7D5205310AB00195712 /* RSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F7D4205310AB00195712 /* RSTableView.swift */; };
 		A2A47FE0205EF6E000F989DF /* RSSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A47FDF205EF6E000F989DF /* RSSearchController.swift */; };
@@ -32,11 +32,11 @@
 		865D11482136C129007D8C47 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		865D114D2136C399007D8C47 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		865D114E2136C399007D8C47 /* DefaultHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultHeader.swift; sourceTree = "<group>"; };
 		865D11502136C399007D8C47 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		865D11512136C399007D8C47 /* DataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRequest.swift; sourceTree = "<group>"; };
+		865D11512136C399007D8C47 /* DataModelRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModelRequest.swift; sourceTree = "<group>"; };
 		865D11522136C399007D8C47 /* JSONRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRequest.swift; sourceTree = "<group>"; };
 		865D11582136C41A007D8C47 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		A28B75782136FF9C00254475 /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		A294F7BD20530FD800195712 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A294F7C020530FD800195712 /* RSMasterTableViewKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSMasterTableViewKit.h; sourceTree = "<group>"; };
 		A294F7C120530FD800195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,22 +78,22 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
-		865D114C2136C399007D8C47 /* NetworkManager */ = {
+		865D114C2136C399007D8C47 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				A28B75782136FF9C00254475 /* NetworkConstants.swift */,
 				865D114D2136C399007D8C47 /* NetworkManager.swift */,
-				865D114E2136C399007D8C47 /* DefaultHeader.swift */,
 				865D114F2136C399007D8C47 /* Request */,
 			);
-			path = NetworkManager;
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		865D114F2136C399007D8C47 /* Request */ = {
 			isa = PBXGroup;
 			children = (
 				865D11502136C399007D8C47 /* Request.swift */,
-				865D11512136C399007D8C47 /* DataRequest.swift */,
 				865D11522136C399007D8C47 /* JSONRequest.swift */,
+				865D11512136C399007D8C47 /* DataModelRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				A294F7C020530FD800195712 /* RSMasterTableViewKit.h */,
-				865D114C2136C399007D8C47 /* NetworkManager */,
+				865D114C2136C399007D8C47 /* Networking */,
 				865D11472136C0C9007D8C47 /* Reachability */,
 				865D11442136BE54007D8C47 /* Extensions */,
 				A2FC879B205D2800000DB9EE /* Utilities */,
@@ -240,7 +240,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				865D11542136C399007D8C47 /* DefaultHeader.swift in Sources */,
 				865D11552136C399007D8C47 /* Request.swift in Sources */,
 				865D11572136C399007D8C47 /* JSONRequest.swift in Sources */,
 				A2FC87A3205D377A000DB9EE /* RSTableViewCell.swift in Sources */,
@@ -248,7 +247,8 @@
 				A294F7D5205310AB00195712 /* RSTableView.swift in Sources */,
 				A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */,
 				865D11532136C399007D8C47 /* NetworkManager.swift in Sources */,
-				865D11562136C399007D8C47 /* DataRequest.swift in Sources */,
+				865D11562136C399007D8C47 /* DataModelRequest.swift in Sources */,
+				A28B75792136FF9C00254475 /* NetworkConstants.swift in Sources */,
 				865D114B2136C1D2007D8C47 /* ReachabilityManager.swift in Sources */,
 				A2FC879F205D2800000DB9EE /* RSMasterTableViewExtensions.swift in Sources */,
 				865D11492136C129007D8C47 /* Reachability.swift in Sources */,

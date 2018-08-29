@@ -8,33 +8,6 @@
 
 import Foundation
 
-/// Key-Values
-let ContentType          = "Content-Type"
-let ApplicationJSON      = "application/json"
-
-/// Messages
-let NoInternetConnection = "No Internet Connection!"
-let InternetConnected    = "Internet Connected!"
-let URLNotValid          = "URL is not valid"
-let ErrorInJSONParsing   = "Error in JSON Parsing"
-let NoDataReturned       = "No data returned from server"
-let NoDataFoundForKeyPath = "No data found for specified KeyPath"
-
-/// Types of HTTP requests
-enum HTTPMethod: String {
-    case GET
-    case POST
-    case PUT
-    case DELETE
-}
-
-/// Types of Response
-enum ResponseType {
-    case json, data
-}
-
-/// Response Error
-typealias ResponseError = (code: UInt, message: String)
 
 
 /// Network manager to handler all network requests
@@ -59,7 +32,6 @@ extension NetworkManager {
         
         // check for network reachability
         guard ReachabilityManager.shared.isReachable else {
-            ReachabilityManager.shared.showInternetConnectionUpdatedMessage()
             self.showError(ResponseError(0, NoInternetConnection), failure: failure)
             return
         }
