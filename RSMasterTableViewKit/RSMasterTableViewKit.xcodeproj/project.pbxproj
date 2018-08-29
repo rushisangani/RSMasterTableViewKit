@@ -62,10 +62,10 @@
 		A294F7BF20530FD800195712 /* RSMasterTableViewKit */ = {
 			isa = PBXGroup;
 			children = (
+				A294F7C020530FD800195712 /* RSMasterTableViewKit.h */,
 				A2FC879B205D2800000DB9EE /* Utilities */,
 				A294F7D32053107300195712 /* Source */,
-				A2FC87A7205D6714000DB9EE /* Views */,
-				A294F7C020530FD800195712 /* RSMasterTableViewKit.h */,
+				A2FC87A7205D6714000DB9EE /* RSEmptyDataSet */,
 				A294F7C120530FD800195712 /* Info.plist */,
 			);
 			path = RSMasterTableViewKit;
@@ -77,7 +77,6 @@
 				A294F7D4205310AB00195712 /* RSTableView.swift */,
 				A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */,
 				A2FC87A2205D377A000DB9EE /* RSTableViewCell.swift */,
-				A2FC87AA205D6979000DB9EE /* RSEmptyDataView.swift */,
 				A2A47FDF205EF6E000F989DF /* RSSearchController.swift */,
 			);
 			path = Source;
@@ -92,12 +91,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		A2FC87A7205D6714000DB9EE /* Views */ = {
+		A2FC87A7205D6714000DB9EE /* RSEmptyDataSet */ = {
 			isa = PBXGroup;
 			children = (
+				A2FC87AA205D6979000DB9EE /* RSEmptyDataView.swift */,
 				A2FC87A8205D672F000DB9EE /* RSEmptyDataView.xib */,
 			);
-			path = Views;
+			path = RSEmptyDataSet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

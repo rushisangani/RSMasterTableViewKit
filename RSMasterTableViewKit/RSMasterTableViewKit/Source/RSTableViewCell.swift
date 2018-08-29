@@ -19,9 +19,7 @@ extension Reusable {
 }
 
 /// RSTableViewCell
-open class RSTableViewCell: UITableViewCell, Reusable {
-    
-}
+open class RSTableViewCell: UITableViewCell, Reusable { }
 
 /// UITableView Deque Cell
 extension UITableView {

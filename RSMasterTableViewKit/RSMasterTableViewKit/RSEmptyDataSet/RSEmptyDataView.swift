@@ -8,10 +8,18 @@
 
 import UIKit
 
+/// RSEmptyDataBackground
+public enum RSEmptyDataBackground {
+    case color(color: UIColor)
+    case view(view: UIView)
+}
+
+/// RSEmptyDataView
 open class RSEmptyDataView: UIView {
 
     // MARK: - Outlets
     
+    @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var parentStackView: UIStackView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -32,7 +40,7 @@ open class RSEmptyDataView: UIView {
     // MARK: - Public
     
     /// set empty dataview title, description and image
-    func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, background: UIColor?) {
+    func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage?, background: RSEmptyDataBackground?) {
         
         // title
         if let titleText = title {
@@ -55,15 +63,22 @@ open class RSEmptyDataView: UIView {
             imageView.isHidden = true
         }
         
-        // background color
-        if let bgColor = background {
-            backgroundColor = bgColor
+        // background
+        if let background = background {
+            switch background {
+            case .color(let color):
+                backgroundView.backgroundColor = color
+            case .view(let view):
+                view.frame = backgroundView.bounds
+                backgroundView.addSubview(view)
+                backgroundView.sendSubview(toBack: view)
+            }
         }
     }
     
     /// Show loading indicator
     func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
-        self.parentStackView.isHidden = true
+        self.showEmptyDataState(false)
         activityIndicator.isHidden = false
         
         // loading indicator
@@ -80,5 +95,13 @@ open class RSEmptyDataView: UIView {
     func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
         indicatorLabel.text = ""
+    }
+    
+    /// Show empty data state
+    func showEmptyDataState(_ state: Bool) {
+        
+        self.parentStackView.isHidden = !state
+        self.backgroundView.isHidden = self.parentStackView.isHidden
+        if state { self.hideLoadingIndicator() }
     }
 }
