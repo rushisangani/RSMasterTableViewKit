@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import ObjectMapper
 
 /// Comment Model
-struct Comment: Mappable {
+struct Comment: Codable {
     
     // MARK: - Properties
     
@@ -19,17 +18,4 @@ struct Comment: Mappable {
     var name: String = ""
     var email: String = ""
     var body: String = ""
-    
-    /// init
-    init?(map: Map) {
-    }
-    
-    /// mapping
-    mutating func mapping(map: Map) {
-        postId <- map["postId"]
-        id <- map["id"]
-        name <- map["name"]
-        email <- map["email"]
-        body <- map["body"]
-    }
 }

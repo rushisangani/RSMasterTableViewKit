@@ -1,27 +1,47 @@
 //
-//  DataRequest.swift
-//  ShowItBig
+//  DataModelRequest.swift
+//  RSMasterTableViewKit
 //
-//  Created by Rushi on 11/07/18.
-//  Copyright © 2018 Meditab Software Inc. All rights reserved.
+//  Copyright (c) 2018 Rushi Sangani
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 import Foundation
 
 /// DataModelResponse
-typealias DataModelResponse<T> = ((T) -> ())
+public typealias DataModelResponse<T> = ((T) -> ())
+
+/// Response Error
+public typealias ResponseError = (code: Int, message: String)
 
 /// DataModelRequest
-class DataModelRequest<T: Codable>: Request {
+public class DataModelRequest<T: Codable>: Request {
     
     /// Execute request
-    func execute(success: @escaping DataModelResponse<T>, failure: ((ResponseError) -> ())? = nil) {
+    public func execute(success: @escaping DataModelResponse<T>, failure: ((ResponseError) -> ())? = nil) {
         
-        NetworkManager.shared.execute(request: self, responseType: .dataModel, success: { (response) in
+        NetworkManager.shared.execute(request: self, responseType: .dataModel, success: { [weak self] (response) in
             
             // convert to models
             if let data = (response as? Data) {
-                self.convertDataToObjects(data, success: success, failure: failure)
+                self?.convertDataToObjects(data, success: success, failure: failure)
             }
             
         }, failure: failure)
@@ -33,14 +53,6 @@ extension DataModelRequest {
     
     /// Convert data to specified objects
     private func convertDataToObjects(_ data: Data, success: @escaping ((T) -> ()), failure: ((ResponseError) -> ())?) {
-        
-        do {
-            guard let result = try? JSONDecoder().decode(T.self, from: data) else {
-                return
-            }
-        } catch let error {
-            failure(ResponseError(error, ErrorInJSONParsing))
-        }
         
         // convert to specified type
         let result = try? JSONDecoder().decode(T.self, from: data)
@@ -54,7 +66,7 @@ extension DataModelRequest {
             
             // error
             else if let failure = failure {
-                failure(ResponseError(0, ErrorInJSONParsing))
+                failure(ResponseError(kModelConversionErrCode, mErrorInModelConversion))
             }
         }
     }

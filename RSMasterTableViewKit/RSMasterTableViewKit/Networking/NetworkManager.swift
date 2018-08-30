@@ -1,44 +1,99 @@
 //
-//  File.swift
-//  ShowItBig
+//  NetworkManager.swift
+//  RSMasterTableViewKit
 //
-//  Created by Rushi on 09/07/18.
-//  Copyright © 2018 Meditab Software Inc. All rights reserved.
+//  Copyright (c) 2018 Rushi Sangani
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 import Foundation
 
+/************* Enums *****************/
+
+/// Types of HTTP requests
+public enum HTTPMethod: String {
+    case GET
+    case POST
+    case PUT
+    case DELETE
+}
+
+/************* Error Codes **************/
+
+/// Error codes
+let kNoInternetErrCode      = -1
+let kInvalidURLErrCode      = -2
+let kJSONParsingErrCode     = -3
+let kModelConversionErrCode = -4
+let kHTTPErrCode            = -5
+let kNoDataReturnedErrCode  = -6
+let kDataConversionErrCode  = -7
+
+
+/************* Strings **************/
+
+/// Messages
+let mNoInternetConnection   = "No Internet Connection!"
+let mkInternetConnected     = "Internet Connected!"
+let mURLNotValid            = "Invalid URL!"
+let mErrorInJSONParsing     = "Error in json parsing"
+let mErrorInDataConversion  = "Error in data conversion"
+let mErrorInModelConversion = "Error in data model conversion"
+let mNoDataReturned         = "No data returned from server"
+let mNoDataFoundForKeyPath  = "No data found for specified KeyPath"
 
 
 /// Network manager to handler all network requests
-class NetworkManager {
+open class NetworkManager {
     
     // MARK: - Singleton
     public static let shared = NetworkManager()
     
-    private init() {}
+    // MARK: - Init
+    private init() {
+        ReachabilityManager.shared.initialize()
+    }
     
     // MARK: - Properties
-    var currentTasks: [URLSessionDataTask] = []
+    
+    /// Array of current tasks
+    public var currentTasks: [URLSessionDataTask] = []
 }
 
 // MARK:- Public
 extension NetworkManager {
     
     /**
-     Execute Request
+     Execute Network Request
      */
-     func execute(request: Request, responseType: ResponseType, success: @escaping ((Any) -> ()), failure: ((ResponseError) -> ())?) {
+     public func execute(request: Request, responseType: ResponseType, success: @escaping ((Any) -> ()), failure: ((ResponseError) -> ())?) {
         
         // check for network reachability
-        guard ReachabilityManager.shared.isReachable else {
-            self.showError(ResponseError(0, NoInternetConnection), failure: failure)
+        guard ReachabilityManager.isReachable else {
+            self.showError(ResponseError(kNoInternetErrCode, mNoInternetConnection), failure: failure)
             return
         }
         
         // check for URL
         guard !request.url.isEmpty, let httpURL = URL(string: request.url) else {
-            self.showError(ResponseError(0, URLNotValid), failure: failure)
+            self.showError(ResponseError(kInvalidURLErrCode, mURLNotValid), failure: failure)
             return
         }
         
@@ -51,7 +106,7 @@ extension NetworkManager {
         print(urlRequest.url?.absoluteString ?? "")
         
         // headers
-        var httpHeaders = DefaultHeader().value
+        var httpHeaders = [String: String]()
         
         if let headers = request.headers, !headers.isEmpty {
             httpHeaders.merge(headers) { (_, new) in new }
@@ -65,34 +120,33 @@ extension NetworkManager {
                 urlRequest.httpBody = jsonParameters
                 
                 let paramString = String(data: jsonParameters, encoding: .utf8)
-                print(paramString ?? kEmpty)
+                print(paramString ?? "")
             }catch {
                 print("Unable to add parameters in request.")
             }
         }
         
-        // data task
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+        // start data task
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             
             // remove completed task
-            print("task completed")
-            self.removeTaskForURL(urlRequest.url?.absoluteString ?? "")
+            self?.removeTaskForURL(urlRequest.url?.absoluteString ?? "")
             
             // http error check
             if let httpError = error {
-                self.showError(ResponseError(0, httpError.localizedDescription), failure: failure)
+                self?.showError(ResponseError(kHTTPErrCode, httpError.localizedDescription), failure: failure)
                 return
             }
             
             // response data check
             guard let responseData = data else {
-                self.showError(ResponseError(0, NoDataReturned), failure: failure)
+                self?.showError(ResponseError(kNoDataReturnedErrCode, mNoDataReturned), failure: failure)
                 return
             }
             
             // Get data as JSON
             guard var json = try? JSONSerialization.jsonObject(with: responseData, options: []) else {
-                self.showError(ResponseError(0, ErrorInJSONParsing), failure: failure)
+                self?.showError(ResponseError(kJSONParsingErrCode, mErrorInJSONParsing), failure: failure)
                 return
             }
             
@@ -115,7 +169,7 @@ extension NetworkManager {
             if let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) {
                 success(jsonData)
             }else {
-                self.showError(ResponseError(0, ErrorInJSONParsing), failure: failure)
+                self?.showError(ResponseError(kDataConversionErrCode, mErrorInDataConversion), failure: failure)
             }
         }
         
@@ -123,21 +177,20 @@ extension NetworkManager {
         dataTask.taskDescription = request.url
         
         // add to current tasks
-        currentTasks.append(dataTask)
+        self.currentTasks.append(dataTask)
         
         // start
         dataTask.resume()
     }
     
     /// Cancel Data Task
-    func cancelTaskForURL(_ url: String) {
+    public func cancelTaskForURL(_ url: String) {
         
         // find task for url and cancel it
         if let index = currentTasks.index(where: { $0.taskDescription == url }) {
             
             let dataTask = currentTasks[index]
             dataTask.cancel()
-            print("task cancelled")
             currentTasks.remove(at: index)
         }
     }
@@ -152,16 +205,15 @@ extension NetworkManager {
         // find task for url and remove it
         if let index = currentTasks.index(where: { $0.taskDescription == url }) {
             currentTasks.remove(at: index)
-            print("task removed")
         }
     }
     
-    /// Show Response Error
-    func showError(_ error: ResponseError, failure: ((ResponseError) -> ())?) {
-        if let failure = failure {
-            DispatchQueue.main.async {
-                failure(error)
-            }
+    /// Show error message
+    private func showError(_ error: ResponseError, failure: ((ResponseError) -> ())?) {
+        guard let failure = failure else { return }
+        
+        DispatchQueue.main.async {
+            failure(error)
         }
     }
 }

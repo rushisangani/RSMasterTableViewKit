@@ -1,12 +1,8 @@
 //
-//  ISO8601DateTransform.swift
-//  ObjectMapper
+//  RSPagination.swift
+//  RSMasterTableViewKit
 //
-//  Created by Jean-Pierre Mouilleseaux on 21 Nov 2014.
-//
-//  The MIT License (MIT)
-//
-//  Copyright (c) 2014-2016 Hearst
+//  Copyright (c) 2018 Rushi Sangani
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +21,47 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
+//
 
 import Foundation
 
-public extension DateFormatter {
-	public convenience init(withFormat format : String, locale : String) {
-		self.init()
-		self.locale = Locale(identifier: locale)
-		dateFormat = format
-	}
+/// Pagination request status
+public enum PageRequestStatus {
+    case none, started
 }
 
-open class ISO8601DateTransform: DateFormatterTransform {
-	
-	static let reusableISODateFormatter = DateFormatter(withFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", locale: "en_US_POSIX")
+/// PullToRefresh
+public typealias PullToRefreshHandler = () -> ()
 
-	public init() {
-		super.init(dateFormatter: ISO8601DateTransform.reusableISODateFormatter)
-	}
+/// Pagination
+public typealias PaginationHandler = (_ page: UInt) -> ()
+
+/// Constants
+let kDefaultStartPage    =   UInt(0)
+let kDefaultPageSize     =   UInt(20)
+
+/// Pagination Parameters to fetch page wise data from server
+public struct PaginationParameters {
+    
+    // MARK: - Properties
+    
+    /// Indicates starting page, default is 0
+    public var startPage: UInt = kDefaultStartPage
+    
+    /// Number of records to fetch per page, default is 20
+    public var size: UInt = kDefaultPageSize
+    
+    /// Indicates current page
+    public var currentPage: UInt = kDefaultStartPage
+    
+    // MARK: - Init
+    public init() {}
+    
+    /// Init with values
+    public init(page: UInt, size: UInt) {
+        
+        self.startPage = page
+        self.currentPage = page
+        self.size = size
+    }
 }
-

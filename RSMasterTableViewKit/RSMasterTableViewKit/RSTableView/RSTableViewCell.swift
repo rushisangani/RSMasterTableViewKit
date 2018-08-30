@@ -1,7 +1,8 @@
 //
-//  Constants.swift
+//  RSReusableTableViewCell.swift
+//  RSMasterTableViewKit
 //
-//  Copyright (c) 2017 Rushi Sangani
+//  Copyright (c) 2018 Rushi Sangani
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +23,30 @@
 //  THE SOFTWARE.
 //
 
-
-import Foundation
 import UIKit
-
-/**************** typealias ***************/
 
 /// UITableViewCellConfiguration
 public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())
 
-/// DataSource
-public typealias DataSource<T> = [T]
+/// Reusable TableViewCell
+public protocol Reusable: class {
+    static var reuseIdentifier: String { get }
+}
 
-/// FilteredDataSource
-public typealias FilteredDataSource<T> = [T]
+/// Classname as cell identifier
+extension Reusable {
+    public static var reuseIdentifier: String { return String(describing: self) }
+}
 
-/// PullToRefresh
-public typealias PullToRefreshHandler = () -> ()
+/// RSTableViewCell
+open class RSTableViewCell: UITableViewCell, Reusable { }
 
-/// Infinite Scrolling
-public typealias InfiniteScrollingHandler = (_ page: UInt) -> ()
-
-/// UISearchBarResult
-public typealias UISearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))
-
-/// Strings
-public let defaultSearchPlaceHolder   = "Search"
-public let searchBarCancelButtonTitle = "Cancel"
+/// UITableView Deque Cell
+extension UITableView {
+    
+    /// Deque reusable cell with default identifier at indexPath
+    public func dequeueReusableCell<T: Reusable>(at indexPath: IndexPath) -> T {
+       return self.dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath) as! T
+    }
+}
 

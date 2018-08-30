@@ -2,8 +2,25 @@
 //  RSTableView.swift
 //  RSMasterTableViewKit
 //
-//  Created by Rushi Sangani on 10/03/18.
-//  Copyright © 2018 Rushi Sangani. All rights reserved.
+//  Copyright (c) 2018 Rushi Sangani
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 import UIKit
@@ -18,34 +35,12 @@ protocol RSTableviewDataSourceDelegate: class {
     func getCount() -> Int
 }
 
-/// Pagination Parameters to fetch page wise data from server
-public struct PaginationParameters {
-    
-    /// Indicates starting page, default is 0
-    public var startPage: UInt = 0
-    
-    /// Indicates current page
-    var currentPage: UInt = 0
-    
-    /// Number of records to fetch per page, default is 20
-    public var size: UInt = 20
-    
-    /// Init
-    public init() {}
-    
-    /// Init with values
-    public init(page: UInt, size: UInt) {
-        
-        self.startPage = page
-        self.currentPage = page
-        self.size = size
-    }
-}
-
 /// RSTableView
 open class RSTableView: UITableView {
     
     // MARK: - Properties
+    
+    // MARK: - Private
     
     /// Pull To Refresh control
     lazy private var pullToRefresh: UIRefreshControl = {
@@ -58,17 +53,14 @@ open class RSTableView: UITableView {
     /// PullToRefresh handler
     private var pullToRefreshHandler: PullToRefreshHandler?
     
-    /// Infinite Scrolling handler
-    private var infiniteScrollingHanlder: InfiniteScrollingHandler?
+    /// Pagination handler
+    private var paginationHanlder: PaginationHandler?
     
-    /// checks if should fetch more data for infinite scrolling
+    /// checks if should fetch more data for pagination
     private var shouldFetchMoreData: Bool = false
     
     /// This is to manage current status of the infinite scrolling
-    private var fetchDataStatus: FetchDataStatus = .none
-    
-    /// Pagination Parameters
-    public var paginationParameters: PaginationParameters?
+    private var pageRequestStatus: PageRequestStatus = .none
     
     /// Empty data view
     lazy private var emptyDataView: RSEmptyDataView = {
@@ -79,8 +71,8 @@ open class RSTableView: UITableView {
         return view
     }()
     
-    /// SearchController
-    private var searchController: RSSearchController?
+    /// SearchBar delegate
+    private var searchBarDelegate: RSSearchBarDelegate?
     
     /// RSTableViewDataSource delegate
     weak var tableViewDataSourceDelegate: RSTableviewDataSourceDelegate!
@@ -93,6 +85,11 @@ open class RSTableView: UITableView {
         indicator.hidesWhenStopped = true
         return indicator
     }()
+    
+    // MARK: - Public
+    
+    /// Pagination Parameters
+    public var paginationParameters: PaginationParameters?
     
     // MARK: - Life Cycle
     open override func awakeFromNib() {
@@ -121,11 +118,11 @@ open class RSTableView: UITableView {
         }
     }
     
-    /// Add Infinite Scrolling
-    public func addInfiniteScrolling(parameters: PaginationParameters? = PaginationParameters() , handler: @escaping InfiniteScrollingHandler) {
+    /// Add Pagination
+    public func addPagination(parameters: PaginationParameters? = PaginationParameters() , handler: @escaping PaginationHandler) {
         
         self.paginationParameters = parameters
-        infiniteScrollingHanlder = handler
+        paginationHanlder = handler
         tableFooterView = footerIndicatorView
         if #available(iOS 10.0, *) {
             prefetchDataSource = self
@@ -133,25 +130,20 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar(viewController: UIViewController, attributes: SearchBarAttributes? = nil) {
-        searchController = RSSearchController(viewController: viewController, tableView: self)
+    @discardableResult
+    public func addSearchBar(placeHolder: String? = mDefaultSearchPlaceHolder, tintColor: UIColor? = nil) -> UISearchBar? {
+        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder!, tintColor: tintColor)
+        self.tableHeaderView = self.searchBarDelegate?.searchBar
         
-        // apply attributes
-        if let searchBarAttributes = attributes {
-            searchController?.setSearchBarAttributes(searchBarAttributes)
-        }
-        
-        // search handler
-        searchController?.didSearch = { [weak self] (searchText) in
-            
-            // show search result
+        // handler
+        self.searchBarDelegate?.didSearch = { [weak self] searchText in
             self?.tableViewDataSourceDelegate.getResultForSearchString(searchText)
         }
+        return self.searchBarDelegate?.searchBar
     }
 }
 
 // MARK: - RSTableViewDataSourceUpdate
-
 extension RSTableView: RSTableViewDataSourceUpdate {
     
     /// new data updated in dataSource
@@ -159,18 +151,18 @@ extension RSTableView: RSTableViewDataSourceUpdate {
         
         // check if search text is present
         if needToFilterResultData() {
-            self.tableViewDataSourceDelegate.getResultForSearchString((searchController?.searchString)!)
+            self.tableViewDataSourceDelegate.getResultForSearchString(searchBarDelegate?.searchBar?.text ?? "")
             return
         }
         
         // reload tableview
-        reloadTableView {
+        reloadTableView { [weak self] in
             
             // update empty data set
-            self.updateEmptyDataState()
+            self?.updateEmptyDataState()
             
             // update fetch more data flag
-            self.updateShouldFetchMoreData(count: count)
+            self?.updateShouldFetchMoreData(count: count)
         }
     }
     
@@ -195,18 +187,19 @@ extension RSTableView: RSTableViewDataSourceUpdate {
     
     /// data updated at specified index in dataSource
     func didUpdatedDataSourceAt(index: Int) {
-        updateDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: true)
+        updateOrDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: true)
     }
     
     /// data deleted at specified index in dataSource
     func didDeletedDataDataSourceAt(index: Int) {
-        updateDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: false)
+        updateOrDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: false)
     }
 
     /// all data removed from dataSource
     func didRemovedData(showEmptyState: Bool) {
+        
         resetPagination()
-        reload()
+        refreshData()
         
         // update empty data set, if true
         if showEmptyState {
@@ -214,34 +207,26 @@ extension RSTableView: RSTableViewDataSourceUpdate {
         }
     }
     
-    /// reload
-    func reload() {
+    /// refresh data
+    func refreshData() {
         reloadTableView()
     }
 }
 
 // MARK: - Indicator
-
 extension RSTableView {
     
     /// Show loading indicator
     public func showIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-            self.emptyDataView.showLoadingIndicator(title: title)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.1) { [weak self] in
+            self?.emptyDataView.showLoadingIndicator(title: title)
         }
     }
     
     /// Hide loading indicator
     public func hideIndicator() {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.0) {
-            self.emptyDataView.hideLoadingIndicator()
-        }
-    }
-    
-    /// Show empty state
-    private func updateEmptyDataState() {
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.0) {
-            self.emptyDataView.parentStackView.isHidden = (self.tableViewDataSourceDelegate.getCount() > 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.emptyDataView.hideLoadingIndicator()
         }
     }
     
@@ -256,20 +241,40 @@ extension RSTableView {
     }
 }
 
-// MARK: - RefreshControl
-
+// MARK: - PullToRefresh
 extension RSTableView {
+    
+    // pull to refresh customization
+    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString? = nil) {
+        pullToRefresh.tintColor = tintColor
+        pullToRefresh.attributedTitle = attributedText
+    }
+    
+    /// Ends pull to refresh animating
+    public func endPullToRefresh() {
+        guard self.isPullToRefreshAnimating() else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: { [weak self] in
+            self?.pullToRefresh.endRefreshing()
+        })
+    }
     
     /// Pull To Refresh Handler
     @objc private func handlePullToRefresh() {
-        searchController?.searchController.searchBar.endEditing(true)
+        searchBarDelegate?.searchBar?.resignFirstResponder()
         
         // reset
         resetBeforePullToReresh()
         
+        // call handler
         if let handler = pullToRefreshHandler {
             handler()
         }
+    }
+    
+    /// Checks if pull to refresh is animating
+    private func isPullToRefreshAnimating() -> Bool {
+        return pullToRefresh.isRefreshing
     }
     
     /// This will reset flags and hides animations
@@ -277,59 +282,47 @@ extension RSTableView {
         stopAnimations()
         resetPagination()
     }
-    
-    /// Ends pull to refresh animating
-    public func endPullToRefresh() {
-        if self.isPullToRefreshAnimating() {
-            DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
-                self.pullToRefresh.endRefreshing()
-            })
-        }
-    }
-    
-    // pull to refresh customization
-    public func setPullToRefresh(tintColor: UIColor, attributedText: NSAttributedString? = nil) {
-        pullToRefresh.tintColor = tintColor
-        pullToRefresh.attributedTitle = attributedText
-    }
 }
 
 // MARK: - EmptyDataView
-
 extension RSTableView {
  
     // empty data view set title, description and image
-    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage? = nil, backgroundColor: UIColor? = nil) {
-        emptyDataView.setEmptyDataView(title: title, description: description, image: image, background: backgroundColor)
+    public func setEmptyDataView(title: NSAttributedString?, description: NSAttributedString?, image: UIImage? = nil, background: RSEmptyDataBackground? = nil) {
+        emptyDataView.setEmptyDataView(title: title, description: description, image: image, background: background)
+    }
+    
+    /// Update empty data state
+    private func updateEmptyDataState() {
+        DispatchQueue.main.async { [weak self] in
+            self?.emptyDataView.showEmptyDataState(self?.tableViewDataSourceDelegate.getCount() == 0)
+        }
     }
 }
 
-// MARK: - Infinite Scrolling and Prefetch
-
+// MARK: - Pagination
 extension RSTableView: UITableViewDataSourcePrefetching {
     
     // prefetch rows
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
         guard indexPaths.count > 0,
-              indexPaths.last?.row == tableViewDataSourceDelegate.getCount()-1,
-              shouldFetchMoreData
+            indexPaths.last?.row == tableViewDataSourceDelegate.getCount()-1, shouldFetchMoreData
         else { return }
         
         self.fetchMoreData()
     }
     
-    /// Fetch more data, if not already status
+    /// Fetch more data, if not already started status
     private func fetchMoreData() {
-        if fetchDataStatus == .started { return }
+        if pageRequestStatus == .started { return }
         
         // fetch next page data
-        if let handler = self.infiniteScrollingHanlder, let parameters = paginationParameters {
+        if let handler = self.paginationHanlder, let parameters = paginationParameters {
             footerIndicatorView.startAnimating()
-            fetchDataStatus = .started
+            pageRequestStatus = .started
             
             // calculate next page
-            //let page = (tableViewDataSourceDelegate.getCount() / Int(parameters.size)) + 1
             paginationParameters?.currentPage = parameters.currentPage+1
             
             // calling handler
@@ -338,13 +331,13 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     }
     
     /// Checks if need to fetch more data
-    private func isInfiniteScrollingAdded() -> Bool {
-        return (self.infiniteScrollingHanlder != nil)
+    private func isPaginationEnabled() -> Bool {
+        return (self.paginationHanlder != nil)
     }
     
     /// updates the pagination parameters
     private func updateShouldFetchMoreData(count: Int) {
-        guard isInfiniteScrollingAdded() else {
+        guard isPaginationEnabled() else {
             shouldFetchMoreData = false
             return
         }
@@ -353,7 +346,6 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     
     /// reset current page
     private func resetPagination() {
-        
         shouldFetchMoreData = false
         if let pagination = paginationParameters {
             paginationParameters?.currentPage = pagination.startPage
@@ -361,43 +353,31 @@ extension RSTableView: UITableViewDataSourcePrefetching {
     }
 }
 
-// MARK: - Private
-
+// MARK: - UI Update & Animations
 extension RSTableView {
-    
-    /// Checks if pull to refresh is animating
-    private func isPullToRefreshAnimating() -> Bool {
-        return pullToRefresh.isRefreshing
-    }
     
     /// Checks if filter result by search string
     func needToFilterResultData() -> Bool {
-        if let searchViewController = searchController, !searchViewController.searchString.isEmpty {
+        if let searchText = searchBarDelegate?.searchBar?.text, !searchText.isEmpty {
             return true
         }
         return false
     }
     
-    /// stop animations: hide refresh animation and indicator
-    private func stopAnimations() {
-        footerIndicatorView.stopAnimating()
-        self.hideIndicator()
-    }
-    
     /// reload tableview
     private func reloadTableView(completion: (() -> ())? = nil) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             
             // hide animations
-            self.hideAllAnimations()
+            self?.hideAllAnimations()
             
             // reload without animation
             UIView.setAnimationsEnabled(false)
-            self.reloadData()
+            self?.reloadData()
             UIView.setAnimationsEnabled(true)
             
-            // update fetch data status
-            self.fetchDataStatus = .completed
+            // update page request status
+            self?.pageRequestStatus = .none
             
             // call completion
             if let completion = completion {
@@ -414,31 +394,31 @@ extension RSTableView {
             indexPaths.append(IndexPath(row: i, section: section))
         }
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             
             // hide animations
-            self.hideAllAnimations()
+            self?.hideAllAnimations()
             
             // insert without animation
             UIView.setAnimationsEnabled(false)
             
             // insert rows
             if #available(iOS 11.0, *) {
-                self.performBatchUpdates({
-                    self.insertRows(at: indexPaths, with: .none)
+                self?.performBatchUpdates({
+                    self?.insertRows(at: indexPaths, with: .none)
                 }) { (success) in
                 }
             } else {
-                self.beginUpdates()
-                self.insertRows(at: indexPaths, with: .none)
-                self.endUpdates()
+                self?.beginUpdates()
+                self?.insertRows(at: indexPaths, with: .none)
+                self?.endUpdates()
             }
             
             // enable animations
             UIView.setAnimationsEnabled(true)
             
-            // update fetch data status
-            self.fetchDataStatus = .completed
+            // update page request status
+            self?.pageRequestStatus = .none
             
             // call completion
             if let completion = completion {
@@ -448,24 +428,31 @@ extension RSTableView {
     }
     
     /// update or delete rows at IndexPaths
-    private func updateDeleteRows(indexPaths: [IndexPath], isUpdate: Bool) {
-        DispatchQueue.main.async {
+    private func updateOrDeleteRows(indexPaths: [IndexPath], isUpdate: Bool) {
+        DispatchQueue.main.async { [weak self] in
             
             // stop animations
-            self.stopAnimations()
+            self?.stopAnimations()
             
             // reload without animation
             UIView.setAnimationsEnabled(false)
             
-            self.beginUpdates()
+            self?.beginUpdates()
             if isUpdate {
-                self.reloadRows(at: indexPaths, with: .none)
+                self?.reloadRows(at: indexPaths, with: .none)
             }else {
-                self.deleteRows(at: indexPaths, with: .none)
+                self?.deleteRows(at: indexPaths, with: .none)
             }
-            self.endUpdates()
+            self?.endUpdates()
             
+            // enable animations
             UIView.setAnimationsEnabled(true)
         }
+    }
+    
+    /// stop animations: hide refresh animation and indicator
+    private func stopAnimations() {
+        footerIndicatorView.stopAnimating()
+        self.hideIndicator()
     }
 }

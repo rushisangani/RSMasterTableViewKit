@@ -2,11 +2,35 @@
 //  RSTableViewDataSource.swift
 //  RSMasterTableViewKit
 //
-//  Created by Rushi Sangani on 17/03/18.
-//  Copyright © 2018 Rushi Sangani. All rights reserved.
+//  Copyright (c) 2018 Rushi Sangani
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
+
 import UIKit
+
+/// DataSource
+public typealias DataSource<T> = [T]
+
+/// FilteredDataSource
+public typealias FilteredDataSource<T> = [T]
 
 /// RSTableViewDataSourceUpdate to handle data source updating
 protocol RSTableViewDataSourceUpdate: class {
@@ -27,7 +51,7 @@ protocol RSTableViewDataSourceUpdate: class {
     func didRemovedData(showEmptyState: Bool)
     
     /// To be called when dataSourced is updated
-    func reload()
+    func refreshData()
 }
 
 /// RSTableViewDataSource
@@ -45,6 +69,23 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// filtered data source for tableView
     var filteredDataSource: FilteredDataSource<T> = []
     
+    /// SearchBar Result Handler
+    var searchResultHandler: SearchBarResult<T>?
+    
+    // MARK: - Public
+    
+    /// get datasource array
+    public var array: FilteredDataSource<T> {
+        return Array(arrayLiteral: self.filteredDataSource) as! FilteredDataSource
+    }
+    
+    /// get datasource count
+    public var count: Int {
+        return tableView!.needToFilterResultData() ? filteredDataSource.count : dataSource.count
+    }
+    
+    // MARK: - Private
+    
     /// datasource update delegate
     private weak var dataSourceUpdateDelegate: RSTableViewDataSourceUpdate?
     
@@ -57,19 +98,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// tableview for datasource
     private weak var tableView: RSTableView?
     
-    /// SearchBar Result Handler
-    public var searchResultHandler: UISearchBarResult<T>?
-    
-    /// get datasource array
-    public var array: FilteredDataSource<T> {
-        return Array(arrayLiteral: self.filteredDataSource) as! FilteredDataSource
-    }
-    
-    /// get datasource count
-    public var count: Int {
-        return tableView!.needToFilterResultData() ? filteredDataSource.count : dataSource.count
-    }
-    
+
     // MARK: - Initialize
     
     public init(tableView: RSTableView, identifier: String, cellConfiguration: @escaping UITableViewCellConfiguration<T>) {
@@ -155,23 +184,22 @@ extension RSTableViewDataSource {
 }
 
 // MARK:- RSTableviewDataSourceDelegate
-
 extension RSTableViewDataSource: RSTableviewDataSourceDelegate {
     
-    /// called to be filter result
+    /// To get filtered result
     func getResultForSearchString(_ text: String) {
-        
+
         var data = self.dataSource
         if let handler = searchResultHandler, !text.isEmpty {
             data = handler(text, data)
         }
         self.filteredDataSource = data
         
-        // update
-        self.dataSourceUpdateDelegate?.reload()
+        // reload data
+        self.dataSourceUpdateDelegate?.refreshData()
     }
     
-    /// called to get data count
+    /// To get datasource array count
     func getCount() -> Int {
         return count
     }

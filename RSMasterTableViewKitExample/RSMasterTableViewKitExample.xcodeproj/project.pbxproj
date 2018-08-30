@@ -7,16 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8698C9BD2138056D00719582 /* RSMasterTableViewKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8698C9BC2138056D00719582 /* RSMasterTableViewKit.framework */; };
+		8698C9BE2138056D00719582 /* RSMasterTableViewKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8698C9BC2138056D00719582 /* RSMasterTableViewKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A294F79120530F4B00195712 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F79020530F4B00195712 /* AppDelegate.swift */; };
 		A294F79320530F4B00195712 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F79220530F4B00195712 /* DemoViewController.swift */; };
 		A294F79620530F4B00195712 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A294F79420530F4B00195712 /* Main.storyboard */; };
 		A294F79820530F4B00195712 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A294F79720530F4B00195712 /* Assets.xcassets */; };
 		A294F79B20530F4B00195712 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A294F79920530F4B00195712 /* LaunchScreen.storyboard */; };
-		A294F7D02053105100195712 /* RSMasterTableViewKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; };
-		A294F7D12053105100195712 /* RSMasterTableViewKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2C648CC20CBE09C0011C0DD /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C648CB20CBE09C0011C0DD /* Comment.swift */; };
 		A2FC87AD205D8565000DB9EE /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */; };
-		F19FFB7B5A44B231998B8A79 /* Pods_RSMasterTableViewKitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +25,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A294F7D12053105100195712 /* RSMasterTableViewKit.framework in Embed Frameworks */,
+				8698C9BE2138056D00719582 /* RSMasterTableViewKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		14090770F20DD10FE09930A8 /* Pods-RSMasterTableViewKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSMasterTableViewKitExample.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample.debug.xcconfig"; sourceTree = "<group>"; };
+		8698C9BC2138056D00719582 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DE429C2D9D4A9A8C622E3C0 /* Pods-RSMasterTableViewKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSMasterTableViewKitExample.release.xcconfig"; path = "../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample.release.xcconfig"; sourceTree = "<group>"; };
 		A294F78D20530F4B00195712 /* RSMasterTableViewKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSMasterTableViewKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A294F79020530F4B00195712 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -43,7 +43,6 @@
 		A294F79720530F4B00195712 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A294F79A20530F4B00195712 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A294F79C20530F4B00195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2C648CB20CBE09C0011C0DD /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
 		B825992C795F2DC417D7C356 /* Pods_RSMasterTableViewKitExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RSMasterTableViewKitExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,8 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A294F7D02053105100195712 /* RSMasterTableViewKit.framework in Frameworks */,
-				F19FFB7B5A44B231998B8A79 /* Pods_RSMasterTableViewKitExample.framework in Frameworks */,
+				8698C9BD2138056D00719582 /* RSMasterTableViewKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,7 +71,7 @@
 		A294F78420530F4B00195712 = {
 			isa = PBXGroup;
 			children = (
-				A294F7CF2053105100195712 /* RSMasterTableViewKit.framework */,
+				8698C9BC2138056D00719582 /* RSMasterTableViewKit.framework */,
 				A294F78F20530F4B00195712 /* RSMasterTableViewKitExample */,
 				A294F78E20530F4B00195712 /* Products */,
 				F15F0032BB55E809D3A524F4 /* Pods */,
@@ -92,14 +90,14 @@
 		A294F78F20530F4B00195712 /* RSMasterTableViewKitExample */ = {
 			isa = PBXGroup;
 			children = (
-				A294F79020530F4B00195712 /* AppDelegate.swift */,
-				A294F79220530F4B00195712 /* DemoViewController.swift */,
 				A2C648CD20CBEC670011C0DD /* Models */,
+				A294F79020530F4B00195712 /* AppDelegate.swift */,
+				A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */,
+				A294F79220530F4B00195712 /* DemoViewController.swift */,
 				A294F79420530F4B00195712 /* Main.storyboard */,
 				A294F79720530F4B00195712 /* Assets.xcassets */,
 				A294F79920530F4B00195712 /* LaunchScreen.storyboard */,
 				A294F79C20530F4B00195712 /* Info.plist */,
-				A2FC87AC205D8565000DB9EE /* MyTableViewCell.swift */,
 			);
 			path = RSMasterTableViewKitExample;
 			sourceTree = "<group>";
@@ -133,8 +131,6 @@
 				A294F78A20530F4B00195712 /* Frameworks */,
 				A294F78B20530F4B00195712 /* Resources */,
 				A294F7D22053105100195712 /* Embed Frameworks */,
-				C5CE38BE89EC83C2204A4F13 /* [CP] Embed Pods Frameworks */,
-				204BB1B261D3560D8A91CC5D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -193,21 +189,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		204BB1B261D3560D8A91CC5D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7DB92D0AB8EF373AA30CEF89 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -224,26 +205,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C5CE38BE89EC83C2204A4F13 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-RSMasterTableViewKitExample/Pods-RSMasterTableViewKitExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

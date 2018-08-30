@@ -105,3 +105,14 @@ open class RSEmptyDataView: UIView {
         if state { self.hideLoadingIndicator() }
     }
 }
+
+// MARK: - View From Nib
+public extension UIView {
+    
+    /// Load view from nib
+    class func loadFromNib<T: UIView>() -> T {
+        
+        let nib =  UINib(nibName: String(describing: T.self), bundle: Bundle(for: T.self))
+        return nib.instantiate(withOwner: nil, options: nil).first as! T
+    }
+}
