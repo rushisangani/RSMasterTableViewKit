@@ -33,15 +33,15 @@ class DemoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // show indicator
-        tableView.showIndicator(title: NSAttributedString(string: "LOADING"), tintColor: UIColor.darkGray)
-        
         // fetch data
         fetchInitialData()
     }
     
     /// Fetch initial data
     func fetchInitialData() {
+        
+        // show indicator
+        tableView.showIndicator(title: NSAttributedString(string: "LOADING"), tintColor: UIColor.darkGray)
         
         // fetch and display data
         let url = getURLForPage(kPaginationStartPage)
@@ -62,7 +62,10 @@ class DemoViewController: UIViewController {
         }
         
         // show empty data view when no data available
-        tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description: nil, image: nil, background: RSEmptyDataBackground.color(color: UIColor.red.withAlphaComponent(0.5)))
+        tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description:  NSAttributedString(string: "Comments that you've posted will appear here."), image: nil, background: RSEmptyDataBackground.color(color: UIColor.red.withAlphaComponent(0.5)))
+        
+        // search bar
+        tableView.addSearchBar
         
         // add pull to refresh
         tableView.addPullToRefresh { [weak self] in

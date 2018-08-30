@@ -88,6 +88,11 @@ open class RSTableView: UITableView {
     
     // MARK: - Public
     
+    /// SearchBar
+    public var searchBar: UISearchBar? {
+        return self.searchBarDelegate?.searchBar
+    }
+    
     /// Pagination Parameters
     public var paginationParameters: PaginationParameters?
     
@@ -295,7 +300,9 @@ extension RSTableView {
     /// Update empty data state
     private func updateEmptyDataState() {
         DispatchQueue.main.async { [weak self] in
-            self?.emptyDataView.showEmptyDataState(self?.tableViewDataSourceDelegate.getCount() == 0)
+            let show = (self?.tableViewDataSourceDelegate.getCount() == 0)
+            self?.emptyDataView.showEmptyDataState(show)
+            self?.tableHeaderView?.isHidden = show
         }
     }
 }

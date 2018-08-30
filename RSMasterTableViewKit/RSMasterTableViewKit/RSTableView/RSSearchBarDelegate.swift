@@ -27,31 +27,23 @@
 import Foundation
 import UIKit
 
-/// SearchBarResult
-public typealias SearchBarResult<T> = ((_ searchText: String, DataSource<T>) -> (FilteredDataSource<T>))
+/// SearchHandler
+public typealias SearchHandler<T> = ((String) -> ())
 
 /// Default PlaceHolder
 public let mDefaultSearchPlaceHolder   = "Search"
 
-/// Search Context
-public enum SearchContext {
-    case Internal, External
-}
-
 /// RSSearchBarDelegate
-open class RSSearchBarDelegate: NSObject {
+open class RSSearchBarDelegate<T>: NSObject {
     
     // MARK: - Properties
     public var searchBar: UISearchBar?
     
     /// to execute on search event
-    public var didSearch: ((String) -> ())?
-    
-    /// to filter data based on context
-    private var context: SearchContext = .Internal
+    private var searchHandler: SearchHandler<T>?
     
     // MARK: - Initialize
-    init(placeHolder: String, tintColor: UIColor?, context: SearchContext = .Internal) {
+    init(placeHolder: String, tintColor: UIColor?, handler: @escaping SearchHandler<T>) {
         super.init()
         
         searchBar = UISearchBar()
@@ -60,13 +52,13 @@ open class RSSearchBarDelegate: NSObject {
         searchBar?.barTintColor = tintColor
         searchBar?.placeholder = placeHolder
         searchBar?.enablesReturnKeyAutomatically = false
-        self.context = context
+        self.searchHandler = handler
     }
     
     // MARK: - Private
     private func searchForText(text: String?) {
-        guard let search = didSearch else { return }
-        search(text ?? "")
+        guard let handler = searchHandler else { return }
+        handler(text ?? "")
     }
 }
 
