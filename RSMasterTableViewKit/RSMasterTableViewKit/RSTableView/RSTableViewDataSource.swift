@@ -32,6 +32,9 @@ public typealias DataSource<T> = [T]
 /// FilteredDataSource
 public typealias FilteredDataSource<T> = [T]
 
+/// SearchHandler
+public typealias SearchResultHandler<T> = ((String, DataSource<T>) -> ())
+
 /// RSTableViewDataSourceUpdate to handle data source updating
 protocol RSTableViewDataSourceUpdate: class {
     
@@ -69,9 +72,6 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     /// filtered data source for tableView
     var filteredDataSource: FilteredDataSource<T> = []
     
-    /// SearchBar Result Handler
-    var searchResultHandler: SearchBarResult<T>?
-    
     // MARK: - Public
     
     /// get datasource array
@@ -79,9 +79,12 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
         return Array(arrayLiteral: self.filteredDataSource) as! FilteredDataSource
     }
     
+    /// Search Result Handler
+    public var searchResultHandler: SearchResultHandler<T>?
+    
     /// get datasource count
     public var count: Int {
-        return tableView!.needToFilterResultData() ? filteredDataSource.count : dataSource.count
+        return filteredDataSource.count
     }
     
     // MARK: - Private
@@ -143,8 +146,12 @@ extension RSTableViewDataSource {
     }
     
     /// sets data in datasource
-    public func setData(data: DataSource<T>) {
-        self.dataSource = data
+    public func setData(data: DataSource<T>, replace: Bool = true) {
+        if replace {
+            self.dataSource = data
+        }else {
+            self.filteredDataSource = data
+        }
         self.dataSourceUpdateDelegate?.didSetDataSource(count: data.count)
     }
     
@@ -186,17 +193,11 @@ extension RSTableViewDataSource {
 // MARK:- RSTableviewDataSourceDelegate
 extension RSTableViewDataSource: RSTableviewDataSourceDelegate {
     
-    /// To get filtered result
-    func getResultForSearchString(_ text: String) {
-
-        var data = self.dataSource
-        if let handler = searchResultHandler, !text.isEmpty {
-            data = handler(text, data)
+    /// Update search
+    func updateSearch(_ searchText: String) {
+        if let handler = searchResultHandler {
+            handler(searchText, self.dataSource)
         }
-        self.filteredDataSource = data
-        
-        // reload data
-        self.dataSourceUpdateDelegate?.refreshData()
     }
     
     /// To get datasource array count

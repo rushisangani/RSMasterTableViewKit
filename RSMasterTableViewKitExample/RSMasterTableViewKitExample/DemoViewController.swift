@@ -65,12 +65,18 @@ class DemoViewController: UIViewController {
         tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description:  NSAttributedString(string: "Comments that you've posted will appear here."), image: nil, background: RSEmptyDataBackground.color(color: UIColor.red.withAlphaComponent(0.5)))
         
         // search bar
-        tableView.addSearchBar
+        tableView.addSearchBar()
+        dataSource?.searchResultHandler = { [weak self] (searchString, dataArray) in
+            
+            // filter
+            let result = dataArray.filter({ $0.email.starts(with: searchString) })
+            self?.dataSource?.setData(data: result, replace: false)
+        }                                                                 
         
         // add pull to refresh
         tableView.addPullToRefresh { [weak self] in
-            //self?.fetchInitialData()
-            self?.dataSource?.setData(data: [])
+            self?.fetchInitialData()
+            //self?.dataSource?.setData(data: [])
         }
         
         // pull to refresh tint color and text
@@ -104,8 +110,9 @@ class DemoViewController: UIViewController {
         request.execute(success: { [weak self] (comments) in
             self?.dataSource?.appendData(data: comments)
             
-        }) { (error) in
+        }) { [weak self] (error) in
             print(error.message)
+            self?.tableView.hideAllAnimations()
         }
     }
 }

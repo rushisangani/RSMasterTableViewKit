@@ -27,37 +27,36 @@
 import Foundation
 import UIKit
 
-/// SearchHandler
-public typealias SearchHandler<T> = ((String) -> ())
-
 /// Default PlaceHolder
 public let mDefaultSearchPlaceHolder   = "Search"
 
 /// RSSearchBarDelegate
-open class RSSearchBarDelegate<T>: NSObject {
+open class RSSearchBarDelegate: NSObject {
     
     // MARK: - Properties
     public var searchBar: UISearchBar?
     
     /// to execute on search event
-    private var searchHandler: SearchHandler<T>?
+    private var didSearch: ((String) -> ())?
     
     // MARK: - Initialize
-    init(placeHolder: String, tintColor: UIColor?, handler: @escaping SearchHandler<T>) {
+    init(placeHolder: String, tintColor: UIColor?, handler: @escaping ((String) -> ())) {
         super.init()
         
         searchBar = UISearchBar()
+        searchBar?.searchBarStyle = .minimal
         searchBar?.delegate = self
         searchBar?.sizeToFit()
         searchBar?.barTintColor = tintColor
         searchBar?.placeholder = placeHolder
         searchBar?.enablesReturnKeyAutomatically = false
-        self.searchHandler = handler
+        searchBar?.isHidden = true
+        self.didSearch = handler
     }
     
     // MARK: - Private
     private func searchForText(text: String?) {
-        guard let handler = searchHandler else { return }
+        guard let handler = didSearch else { return }
         handler(text ?? "")
     }
 }

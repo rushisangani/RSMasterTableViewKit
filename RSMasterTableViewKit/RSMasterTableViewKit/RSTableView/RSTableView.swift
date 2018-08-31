@@ -28,8 +28,8 @@ import UIKit
 /// TableviewDataSourceDelegate to get values of RSTableViewDataSource
 protocol RSTableviewDataSourceDelegate: class {
     
-    /// To be called when user start typing on search box or to filter data based on search text
-    func getResultForSearchString(_ text: String)
+    /// Update Search
+    func updateSearch(_ searchText: String)
     
     /// To get total item count
     func getCount() -> Int
@@ -47,6 +47,7 @@ open class RSTableView: UITableView {
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
+        refreshControl.isHidden = true
         return refreshControl
     }()
     
@@ -71,11 +72,11 @@ open class RSTableView: UITableView {
         return view
     }()
     
-    /// SearchBar delegate
-    private var searchBarDelegate: RSSearchBarDelegate?
-    
     /// RSTableViewDataSource delegate
     weak var tableViewDataSourceDelegate: RSTableviewDataSourceDelegate!
+    
+    /// SearchBar delegate
+    var searchBarDelegate: RSSearchBarDelegate?
     
     /// FooterView
     lazy private var footerIndicatorView: UIActivityIndicatorView = {
@@ -135,16 +136,11 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    @discardableResult
-    public func addSearchBar(placeHolder: String? = mDefaultSearchPlaceHolder, tintColor: UIColor? = nil) -> UISearchBar? {
-        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder!, tintColor: tintColor)
-        self.tableHeaderView = self.searchBarDelegate?.searchBar
-        
-        // handler
-        self.searchBarDelegate?.didSearch = { [weak self] searchText in
-            self?.tableViewDataSourceDelegate.getResultForSearchString(searchText)
+    public func addSearchBar(placeHolder: String? = mDefaultSearchPlaceHolder, tintColor: UIColor? = nil) {
+        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder!, tintColor: tintColor) { [weak self] (searchString) in
+            self?.tableViewDataSourceDelegate.updateSearch(searchString)
         }
-        return self.searchBarDelegate?.searchBar
+        self.tableHeaderView = self.searchBarDelegate?.searchBar
     }
 }
 
@@ -153,12 +149,6 @@ extension RSTableView: RSTableViewDataSourceUpdate {
     
     /// new data updated in dataSource
     func didSetDataSource(count: Int) {
-        
-        // check if search text is present
-        if needToFilterResultData() {
-            self.tableViewDataSourceDelegate.getResultForSearchString(searchBarDelegate?.searchBar?.text ?? "")
-            return
-        }
         
         // reload tableview
         reloadTableView { [weak self] in
@@ -302,7 +292,8 @@ extension RSTableView {
         DispatchQueue.main.async { [weak self] in
             let show = (self?.tableViewDataSourceDelegate.getCount() == 0)
             self?.emptyDataView.showEmptyDataState(show)
-            self?.tableHeaderView?.isHidden = show
+            self?.searchBar?.isHidden = show
+            self?.pullToRefresh.isHidden = show
         }
     }
 }
@@ -362,14 +353,6 @@ extension RSTableView: UITableViewDataSourcePrefetching {
 
 // MARK: - UI Update & Animations
 extension RSTableView {
-    
-    /// Checks if filter result by search string
-    func needToFilterResultData() -> Bool {
-        if let searchText = searchBarDelegate?.searchBar?.text, !searchText.isEmpty {
-            return true
-        }
-        return false
-    }
     
     /// reload tableview
     private func reloadTableView(completion: (() -> ())? = nil) {
