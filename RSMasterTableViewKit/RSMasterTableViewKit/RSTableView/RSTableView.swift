@@ -136,8 +136,8 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar(placeHolder: String? = mDefaultSearchPlaceHolder, tintColor: UIColor? = nil) {
-        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder!, tintColor: tintColor) { [weak self] (searchString) in
+    public func addSearchBar(placeHolder: String? = nil) {
+        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder ?? mDefaultSearchPlaceHolder) { [weak self] (searchString) in
             self?.tableViewDataSourceDelegate.updateSearch(searchString)
         }
         self.tableHeaderView = self.searchBarDelegate?.searchBar

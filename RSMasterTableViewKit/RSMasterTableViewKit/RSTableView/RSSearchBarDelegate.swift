@@ -40,14 +40,13 @@ open class RSSearchBarDelegate: NSObject {
     private var didSearch: ((String) -> ())?
     
     // MARK: - Initialize
-    init(placeHolder: String, tintColor: UIColor?, handler: @escaping ((String) -> ())) {
+    init(placeHolder: String, handler: @escaping ((String) -> ())) {
         super.init()
         
         searchBar = UISearchBar()
         searchBar?.searchBarStyle = .minimal
         searchBar?.delegate = self
         searchBar?.sizeToFit()
-        searchBar?.barTintColor = tintColor
         searchBar?.placeholder = placeHolder
         searchBar?.enablesReturnKeyAutomatically = false
         searchBar?.isHidden = true
