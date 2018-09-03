@@ -62,7 +62,7 @@ class DemoViewController: UIViewController {
         }
         
         // show empty data view when no data available
-        tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description:  NSAttributedString(string: "Comments that you've posted will appear here."), image: nil, background: RSEmptyDataBackground.color(color: UIColor.red.withAlphaComponent(0.5)))
+        tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description:  NSAttributedString(string: "Comments that you've posted will appear here."), image: UIImage(named: "nodata-comments"), background: nil)
         
         // search bar
         tableView.addSearchBar()
@@ -75,8 +75,11 @@ class DemoViewController: UIViewController {
         
         // add pull to refresh
         tableView.addPullToRefresh { [weak self] in
-            self?.fetchInitialData()
-            //self?.dataSource?.setData(data: [])
+            DispatchQueue.global().asyncAfter(deadline: .now()+2, execute: {
+                
+                //self?.dataSource?.setData(data: [])
+                self?.fetchInitialData()
+            })
         }
         
         // pull to refresh tint color and text

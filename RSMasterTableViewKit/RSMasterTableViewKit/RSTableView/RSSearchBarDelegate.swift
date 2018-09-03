@@ -49,7 +49,6 @@ open class RSSearchBarDelegate: NSObject {
         searchBar?.sizeToFit()
         searchBar?.placeholder = placeHolder
         searchBar?.enablesReturnKeyAutomatically = false
-        searchBar?.isHidden = true
         self.didSearch = handler
     }
     

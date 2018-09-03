@@ -47,7 +47,6 @@ open class RSTableView: UITableView {
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
-        refreshControl.isHidden = true
         return refreshControl
     }()
     
@@ -116,12 +115,7 @@ open class RSTableView: UITableView {
     /// Add PullToRefresh to tableview
     public func addPullToRefresh(handler: @escaping PullToRefreshHandler) {
         pullToRefreshHandler = handler
-        
-        if #available(iOS 10.0, *) {
-            refreshControl = pullToRefresh
-        } else {
-            addSubview(pullToRefresh)
-        }
+        self.insertSubview(pullToRefresh, at: 0)
     }
     
     /// Add Pagination
@@ -249,9 +243,9 @@ extension RSTableView {
     public func endPullToRefresh() {
         guard self.isPullToRefreshAnimating() else { return }
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             self?.pullToRefresh.endRefreshing()
-        })
+        }
     }
     
     /// Pull To Refresh Handler
@@ -292,8 +286,6 @@ extension RSTableView {
         DispatchQueue.main.async { [weak self] in
             let show = (self?.tableViewDataSourceDelegate.getCount() == 0)
             self?.emptyDataView.showEmptyDataState(show)
-            self?.searchBar?.isHidden = show
-            self?.pullToRefresh.isHidden = show
         }
     }
 }
