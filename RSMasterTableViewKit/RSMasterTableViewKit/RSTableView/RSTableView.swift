@@ -130,8 +130,8 @@ open class RSTableView: UITableView {
     }
     
     /// Add Searchbar
-    public func addSearchBar(placeHolder: String? = nil) {
-        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder ?? mDefaultSearchPlaceHolder) { [weak self] (searchString) in
+    public func addSearchBar(placeHolder: String? = nil, noResultMessage: NSAttributedString? = nil) {
+        self.searchBarDelegate = RSSearchBarDelegate(placeHolder: placeHolder ?? mDefaultSearchPlaceHolder, message: noResultMessage) { [weak self] (searchString) in
             self?.tableViewDataSourceDelegate.updateSearch(searchString)
         }
         self.tableHeaderView = self.searchBarDelegate?.searchBar
@@ -174,6 +174,23 @@ extension RSTableView: RSTableViewDataSourceUpdate {
         */
     }
     
+    /// search result set in dataSource
+    func didSetSearchResultData(count: Int, replace: Bool) {
+        
+        reloadTableView { [weak self] in
+            
+            // check if no results
+            if count == 0, let message = self?.searchBarDelegate?.noResultMessage {
+                self?.emptyDataView.showNoSearchResultMessage(message)
+            }
+            
+            // update fetch more data flag if content is replaced
+            if replace {
+                self?.updateShouldFetchMoreData(count: count)
+            }
+        }
+    }
+    
     /// data updated at specified index in dataSource
     func didUpdatedDataSourceAt(index: Int) {
         updateOrDeleteRows(indexPaths: [IndexPath(row: index, section: 0)], isUpdate: true)
@@ -209,6 +226,7 @@ extension RSTableView {
     public func showIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) { [weak self] in
             self?.emptyDataView.showLoadingIndicator(title: title)
+            self?.showSearchBar(false)
         }
     }
     
@@ -286,6 +304,20 @@ extension RSTableView {
         DispatchQueue.main.async { [weak self] in
             let show = (self?.tableViewDataSourceDelegate.getCount() == 0)
             self?.emptyDataView.showEmptyDataState(show)
+            self?.showSearchBar(!show)
+        }
+    }
+}
+
+// MARK: - SearchBar
+extension RSTableView {
+    
+    /// Show Searchbar
+    private func showSearchBar(_ show: Bool) {
+        if show, let searchbar = self.searchBar {
+            self.tableHeaderView = searchbar
+        }else {
+            self.tableHeaderView = nil
         }
     }
 }

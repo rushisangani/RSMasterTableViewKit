@@ -53,6 +53,9 @@ protocol RSTableViewDataSourceUpdate: class {
     /// To be called when all data is removed from dataSource
     func didRemovedData(showEmptyState: Bool)
     
+    /// To be called when data is set as search result
+    func didSetSearchResultData(count: Int, replace: Bool)
+    
     /// To be called when dataSourced is updated
     func refreshData()
 }
@@ -146,12 +149,8 @@ extension RSTableViewDataSource {
     }
     
     /// sets data in datasource
-    public func setData(data: DataSource<T>, replace: Bool = true) {
-        if replace {
-            self.dataSource = data
-        }else {
-            self.filteredDataSource = data
-        }
+    public func setData(data: DataSource<T>) {
+        self.dataSource = data
         self.dataSourceUpdateDelegate?.didSetDataSource(count: data.count)
     }
     
@@ -181,6 +180,16 @@ extension RSTableViewDataSource {
     public func deleteData(_ data: T, atIndex index: Int) {
         self.dataSource.remove(at: index)
         self.dataSourceUpdateDelegate?.didDeletedDataDataSourceAt(index: index)
+    }
+    
+    /// set search result data
+    public func setSearchResultData(_ data: DataSource<T>, replace: Bool = false) {
+        if replace {
+            self.dataSource = data
+        }else {
+            self.filteredDataSource = data
+        }
+        self.dataSourceUpdateDelegate?.didSetSearchResultData(count: data.count, replace: replace)
     }
     
     /// clear all data

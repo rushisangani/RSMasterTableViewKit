@@ -36,11 +36,14 @@ open class RSSearchBarDelegate: NSObject {
     // MARK: - Properties
     public var searchBar: UISearchBar?
     
+    /// No result message
+    var noResultMessage: NSAttributedString?
+    
     /// to execute on search event
     private var didSearch: ((String) -> ())?
     
     // MARK: - Initialize
-    init(placeHolder: String, handler: @escaping ((String) -> ())) {
+    init(placeHolder: String, message: NSAttributedString?, handler: @escaping ((String) -> ())) {
         super.init()
         
         searchBar = UISearchBar()
@@ -49,6 +52,7 @@ open class RSSearchBarDelegate: NSObject {
         searchBar?.sizeToFit()
         searchBar?.placeholder = placeHolder
         searchBar?.enablesReturnKeyAutomatically = false
+        self.noResultMessage = message
         self.didSearch = handler
     }
     

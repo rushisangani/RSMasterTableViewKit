@@ -65,20 +65,18 @@ class DemoViewController: UIViewController {
         tableView.setEmptyDataView(title: NSAttributedString(string: "NO COMMENTS AVAILABLE"), description:  NSAttributedString(string: "Comments that you've posted will appear here."), image: UIImage(named: "nodata-comments"), background: nil)
         
         // search bar
-        tableView.addSearchBar()
+        tableView.addSearchBar(noResultMessage: NSAttributedString(string: "No result matching your search criteria"))
         dataSource?.searchResultHandler = { [weak self] (searchString, dataArray) in
             
             // filter
             let result = dataArray.filter({ $0.email.starts(with: searchString) })
-            self?.dataSource?.setData(data: result, replace: false)
+            self?.dataSource?.setSearchResultData(result, replace: false)
         }                                                                 
         
         // add pull to refresh
         tableView.addPullToRefresh { [weak self] in
             DispatchQueue.global().asyncAfter(deadline: .now()+2, execute: {
-                
-                //self?.dataSource?.setData(data: [])
-                self?.fetchInitialData()
+                self?.dataSource?.setData(data: [])
             })
         }
         

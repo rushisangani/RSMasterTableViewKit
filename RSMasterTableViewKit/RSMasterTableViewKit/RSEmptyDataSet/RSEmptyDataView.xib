@@ -46,15 +46,15 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bLc-Ff-5v1">
-                    <rect key="frame" x="20" y="313" width="335" height="41.5"/>
+                    <rect key="frame" x="20" y="311.5" width="335" height="44"/>
                     <subviews>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="d3y-ES-ZYc">
                             <rect key="frame" x="0.0" y="0.0" width="335" height="20"/>
                             <color key="color" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </activityIndicatorView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IvQ-kL-Sgg">
-                            <rect key="frame" x="0.0" y="28" width="335" height="13.5"/>
-                            <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="11"/>
+                            <rect key="frame" x="0.0" y="28" width="335" height="16"/>
+                            <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="13"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>

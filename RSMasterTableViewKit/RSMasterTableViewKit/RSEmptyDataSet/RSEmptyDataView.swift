@@ -111,7 +111,6 @@ open class RSEmptyDataView: UIView {
     /// Hide loading indicator
     func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
-        indicatorLabel.text = ""
     }
     
     /// Show empty data state
@@ -120,6 +119,13 @@ open class RSEmptyDataView: UIView {
         self.parentStackView.isHidden = !state
         self.backgroundView.isHidden = self.parentStackView.isHidden
         if state { self.hideLoadingIndicator() }
+    }
+    
+    /// Show No Search Result message
+    func showNoSearchResultMessage(_ message: NSAttributedString? = nil) {
+        self.showEmptyDataState(false)
+        activityIndicator.stopAnimating()
+        indicatorLabel.attributedText = message
     }
 }
 
