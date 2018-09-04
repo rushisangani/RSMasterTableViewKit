@@ -83,8 +83,10 @@ class DemoViewController: UIViewController {
         // pull to refresh tint color and text
         tableView.setPullToRefresh(tintColor: UIColor.darkGray, attributedText: NSAttributedString(string: "Fetching data"))
         
+        let paginationParams = PaginationParameters(page: 1, size: 50)
+        
         // Pagination
-        tableView.addPagination(parameters: PaginationParameters(page: kPaginationStartPage, size: kPaginationSize)) { [weak self] (page) in
+        tableView.addPagination(parameters: paginationParams) { [weak self] (page) in
             
             // url for next page
             let url = self?.getURLForPage(page)
