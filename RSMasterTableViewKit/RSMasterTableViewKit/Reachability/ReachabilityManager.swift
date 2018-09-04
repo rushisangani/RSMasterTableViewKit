@@ -26,10 +26,10 @@
 import Foundation
 
 /// Reachability Notification
-let kReachabilityChangedNotification = "ReachabilityChangedNotification"
+public let reachabilityChangedNotification = "reachabilityChangedNotification"
 
 /// Reachability Status
-let kReachabilityStatus              = "ReachabilityStatus"
+public let reachabilityStatus              = "reachabilityStatus"
 
 /// ReachabilityManager
 open class ReachabilityManager {
@@ -50,7 +50,8 @@ open class ReachabilityManager {
     /// Checks if connected to network
     private var connected: Bool = true {
         didSet {
-            NotificationCenter.default.post(name: NSNotification.Name.init(kReachabilityChangedNotification), object: reachability, userInfo: [kReachabilityStatus: connected])
+            let notification = Notification.init(name: Notification.Name.init(reachabilityChangedNotification), object: self, userInfo: [reachabilityStatus: connected])
+            NotificationCenter.default.post(notification)
         }
     }
     
