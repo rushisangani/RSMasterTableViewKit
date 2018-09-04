@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
 
   s.name         = "RSMasterTableViewKit"
-  s.version      = "1.0.3"
+  s.version      = "1.1"
   s.summary      = "A comprehensive UITableView which handles everything that you need."
 
   s.description  = <<-DESC
-    A tableView that provides inbuilt paging, pull to refresh, empty states, indicators, search and much more.
+    All-In-One UITableView Kit with inbuilt PullToRefresh, Pagination, EmptyDataSet, Indicator, Networking and much more..
                     DESC
 
   s.homepage     = "https://github.com/rushisangani/RSMasterTableViewKit"
