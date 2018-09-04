@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
-  #s.license      = "MIT"
-  #s.license      = { :type => "MIT", :file => "LICENSE" }
+  s.license      = "MIT"
+  s.license      = { :type => "MIT", :file => "LICENSE" }
 
   s.author             = { "Rushi Sangani" => "rushisangani@gmail.com" }
   s.social_media_url   = "https://github.com/rushisangani"
