@@ -1,5 +1,4 @@
 # RSMasterTableViewKit
-All-In-One UITableView Kit with inbuilt PullToRefresh, Pagination, EmptyDataSet, Indicator, Networking and much more...
 
 ### Why to use RSMasterTableViewKit?
 UITableview is the most used UIKit control for all iOS applications. Simply using UITableview does not complete the functionality of any screen.
@@ -11,11 +10,12 @@ Based on the functionality, a developer also need to code for implementing PullT
 - Easy to use datasource implementation (No need to write **cellForRowAtIndexPath**)
 - PullToRefresh
 - Pagination
-- SearchBar (Local & Web Search) 
+- SearchBar (Local & Web Search)
 - EmptyDataSet
 - Loading Indicator with title
 - JSON to Codable conversion
-- Networking (WebAPI request)
+- Networking (WebAPI request: GET, POST etc)
+- Network Reachabilty Check
 
 ## Requirements
 ```swift
@@ -25,7 +25,6 @@ iOS 10.0+ | Xcode 8.3+ | Swift 4.0+
 ## Installation
 
 ### CocoaPods
-
 ```ruby
 pod 'RSMasterTableViewKit' or pod 'RSMasterTableViewKit', '~> 1.1'
 ```
@@ -33,7 +32,6 @@ pod 'RSMasterTableViewKit' or pod 'RSMasterTableViewKit', '~> 1.1'
 
 ### Generic DataSource
 ```swift
-
 // connect UITableview outlet from storyboard
 @IBOutlet weak var tableView: RSTableView!
 
@@ -94,7 +92,6 @@ tableView.addPagination { (page) in
 
 let paginationParams = PaginationParameters(page: 1, size: 50)
 tableView.addPagination(parameters: paginationParams) { [weak self] (page) in
-
 }
 ```
 
@@ -139,6 +136,8 @@ request.execute(success: { [weak self] (comments) in
 // JSON Request
 let jsonrequest = JSONRequest(url: "", method: .POST, headers: nil, parameters: nil, responeKeyPath: "data")
 
+// Note: Specify keypath here, if you want only key specific json data
+// "data" or "data.contents" etc.
 ```
 
 ### DataSource Operations
@@ -154,6 +153,24 @@ self.dataSource?.setData(data: list)
 
 // clear
 self.dataSource?.clearData()
+```
+
+### Network Reachabilty
+```swift
+if ReachabilityManager.isReachable {
+    // your code
+}
+
+// handler reachability changes
+NotificationCenter.default.addObserver(self, selector: #selector(handleReachabiltyChanges(notification:)), name: NSNotification.Name.init(reachabilityChangedNotification), object: nil)
+
+@objc func handleReachabiltyChanges(notification: Notification) {
+    let isReachable = notification.userInfo?[reachabilityStatus] as? Bool ?? false
+
+    if isReachable {
+        // inform user
+    }
+}
 ```
 
 ### Example
