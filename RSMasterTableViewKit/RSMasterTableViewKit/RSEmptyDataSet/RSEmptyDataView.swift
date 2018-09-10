@@ -123,7 +123,10 @@ open class RSEmptyDataView: UIView {
     func showEmptyDataState(_ state: Bool) {
         self.parentStackView.isHidden = !state
         self.backgroundView.isHidden = self.parentStackView.isHidden
-        if state { self.hideLoadingIndicator() }
+        if state {
+            self.hideLoadingIndicator()
+            self.hideNoSearchLabel()
+        }
     }
     
     /// Show No Search Result message
