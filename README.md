@@ -17,6 +17,8 @@ Based on the functionality, a developer also need to code for implementing PullT
 - Networking (WebAPI request: GET, POST etc)
 - Network Reachabilty Check
 
+![Alt text](https://raw.githubusercontent.com/rushisangani/RSMasterTableViewKit/master/Images/Display.png "Screens")
+
 ## Requirements
 ```swift
 iOS 10.0+ | Xcode 8.3+ | Swift 4.0+
@@ -26,7 +28,7 @@ iOS 10.0+ | Xcode 8.3+ | Swift 4.0+
 
 ### CocoaPods
 ```ruby
-pod 'RSMasterTableViewKit' or pod 'RSMasterTableViewKit', '~> 1.1'
+pod 'RSMasterTableViewKit' or pod 'RSMasterTableViewKit', '~> 1.2'
 ```
 ## Usage
 

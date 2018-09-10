@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "RSMasterTableViewKit"
-  s.version      = "1.1"
+  s.version      = "1.2"
   s.summary      = "A comprehensive UITableView which handles everything that you need."
 
   s.description  = <<-DESC
