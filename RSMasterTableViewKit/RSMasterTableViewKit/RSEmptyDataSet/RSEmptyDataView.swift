@@ -51,6 +51,7 @@ open class RSEmptyDataView: UIView {
     open override func awakeFromNib() {
         super.awakeFromNib()
         activityIndicator.stopAnimating()
+        indicatorLabel.isHidden = true
         parentStackView.isHidden = true
     }
     
@@ -96,7 +97,6 @@ open class RSEmptyDataView: UIView {
     /// Show loading indicator
     func showLoadingIndicator(title: NSAttributedString? = nil, tintColor: UIColor? = nil) {
         self.showEmptyDataState(false)
-        activityIndicator.isHidden = false
         
         // loading indicator
         if let color = tintColor {
@@ -105,6 +105,7 @@ open class RSEmptyDataView: UIView {
         activityIndicator.startAnimating()
         
         // text
+        indicatorLabel.isHidden = false
         indicatorLabel.attributedText = title
     }
     
@@ -113,9 +114,13 @@ open class RSEmptyDataView: UIView {
         activityIndicator.stopAnimating()
     }
     
+    /// Hide no search result
+    func hideNoSearchLabel() {
+        indicatorLabel.isHidden = true
+    }
+    
     /// Show empty data state
     func showEmptyDataState(_ state: Bool) {
-        
         self.parentStackView.isHidden = !state
         self.backgroundView.isHidden = self.parentStackView.isHidden
         if state { self.hideLoadingIndicator() }
@@ -124,14 +129,14 @@ open class RSEmptyDataView: UIView {
     /// Show No Search Result message
     func showNoSearchResultMessage(_ message: NSAttributedString? = nil) {
         self.showEmptyDataState(false)
-        activityIndicator.stopAnimating()
+        indicatorLabel.isHidden = false
         indicatorLabel.attributedText = message
     }
 }
 
 // MARK: - View From Nib
 public extension UIView {
-    
+
     /// Load view from nib
     class func loadFromNib<T: UIView>() -> T {
         

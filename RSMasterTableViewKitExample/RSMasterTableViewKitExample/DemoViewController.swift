@@ -41,7 +41,7 @@ class DemoViewController: UIViewController {
     func fetchInitialData() {
         
         // show indicator
-        tableView.showIndicator(title: NSAttributedString(string: "LOADING"), tintColor: UIColor.darkGray)
+        tableView.showIndicator(title: NSAttributedString(string: "LOADING"), tintColor: UIColor.black)
         
         // fetch and display data
         let url = getURLForPage(kPaginationStartPage)

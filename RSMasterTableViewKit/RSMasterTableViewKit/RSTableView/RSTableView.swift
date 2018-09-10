@@ -182,6 +182,8 @@ extension RSTableView: RSTableViewDataSourceUpdate {
             // check if no results
             if count == 0, let message = self?.searchBarDelegate?.noResultMessage {
                 self?.emptyDataView.showNoSearchResultMessage(message)
+            }else {
+                self?.emptyDataView.hideNoSearchLabel()
             }
             
             // update fetch more data flag if content is replaced
