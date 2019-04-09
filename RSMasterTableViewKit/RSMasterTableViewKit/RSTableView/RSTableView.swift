@@ -80,7 +80,7 @@ open class RSTableView: UITableView {
     /// FooterView
     lazy private var footerIndicatorView: UIActivityIndicatorView = {
         
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let indicator = UIActivityIndicatorView(style: .gray)
         indicator.color = UIColor.darkGray
         indicator.hidesWhenStopped = true
         return indicator
@@ -106,7 +106,7 @@ open class RSTableView: UITableView {
     private func initialize() {
         
         estimatedRowHeight = 50
-        rowHeight = UITableViewAutomaticDimension
+        rowHeight = UITableView.automaticDimension
         tableFooterView = UIView()
     }
     

@@ -187,7 +187,7 @@ extension NetworkManager {
     public func cancelTaskForURL(_ url: String) {
         
         // find task for url and cancel it
-        if let index = currentTasks.index(where: { $0.taskDescription == url }) {
+        if let index = currentTasks.firstIndex(where: { $0.taskDescription == url }) {
             
             let dataTask = currentTasks[index]
             dataTask.cancel()
@@ -203,7 +203,7 @@ extension NetworkManager {
     private func removeTaskForURL(_ url: String) {
         
         // find task for url and remove it
-        if let index = currentTasks.index(where: { $0.taskDescription == url }) {
+        if let index = currentTasks.firstIndex(where: { $0.taskDescription == url }) {
             currentTasks.remove(at: index)
         }
     }
