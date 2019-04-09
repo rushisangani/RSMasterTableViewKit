@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		863213A0216C88B7004593FF /* RSSectionedTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632139F216C88B7004593FF /* RSSectionedTableViewDataSource.swift */; };
 		865D11492136C129007D8C47 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11482136C129007D8C47 /* Reachability.swift */; };
 		865D114B2136C1D2007D8C47 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */; };
 		865D11532136C399007D8C47 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114D2136C399007D8C47 /* NetworkManager.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8632139F216C88B7004593FF /* RSSectionedTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSectionedTableViewDataSource.swift; sourceTree = "<group>"; };
 		865D11482136C129007D8C47 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		865D114D2136C399007D8C47 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				A2FC87A2205D377A000DB9EE /* RSTableViewCell.swift */,
 				8698C9B82137CA9D00719582 /* RSPagination.swift */,
 				A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */,
+				8632139F216C88B7004593FF /* RSSectionedTableViewDataSource.swift */,
 				A294F7D4205310AB00195712 /* RSTableView.swift */,
 				8698C9BA2137EE4900719582 /* RSSearchBarDelegate.swift */,
 			);
@@ -232,6 +235,7 @@
 				865D11572136C399007D8C47 /* JSONRequest.swift in Sources */,
 				A2FC87A3205D377A000DB9EE /* RSTableViewCell.swift in Sources */,
 				A294F7D5205310AB00195712 /* RSTableView.swift in Sources */,
+				863213A0216C88B7004593FF /* RSSectionedTableViewDataSource.swift in Sources */,
 				A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */,
 				8698C9B92137CA9D00719582 /* RSPagination.swift in Sources */,
 				865D11532136C399007D8C47 /* NetworkManager.swift in Sources */,
