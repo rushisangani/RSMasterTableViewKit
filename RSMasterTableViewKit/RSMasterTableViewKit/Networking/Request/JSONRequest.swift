@@ -25,13 +25,50 @@
 
 import Foundation
 
-/// JSON Response
-public typealias JSONResponse = ((Any) -> ())
-
 /// JSONRequest
 public class JSONRequest: Request {
     
+    //MARK: - Request
+    public typealias ResponseType = Any
+    
+    /// URL - Specify url string
+    public var url: String
+    
+    /// HTTP Method
+    public var method: HTTPMethod = .GET
+    
+    /// Requst Headers
+    public var headers: [String: String]?
+    
+    /// Request Parameters
+    public var parameters: [String: Any]?
+    
+    /// Response Keypath - path to the key in json for result i.e. "response/data/", "data"
+    public var responeKeyPath: String?
+    
+    //MARK: - Init
+    
+    public init(url: String, method: HTTPMethod, headers: [String: String]? = nil, parameters: [String: Any]? = nil, responeKeyPath: String? = nil) {
+        self.method = method
+        self.url = url
+        self.headers = headers
+        self.parameters = parameters
+        self.responeKeyPath = responeKeyPath
+    }
+    
+    public convenience init(url: String, responeKeyPath: String) {
+        self.init(url: url, method: .GET, responeKeyPath: responeKeyPath)
+    }
+    
+    public convenience init(url: String) {
+        self.init(url: url, method: .GET)
+    }
+    
     /// Execute JSON Request
+    public func execute(completion: Result<Any, ResponseError>) {
+        
+    }
+    
     public func execute(success: @escaping JSONResponse, failure: ((ResponseError) -> ())? = nil) {
         NetworkManager.shared.execute(request: self, responseType: .json, success: success, failure: failure)
     }

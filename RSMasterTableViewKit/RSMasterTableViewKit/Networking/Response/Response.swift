@@ -1,5 +1,5 @@
 //
-//  Request.swift
+//  ResponseType.swift
 //  RSMasterTableViewKit
 //
 //  Copyright (c) 2018 Rushi Sangani
@@ -25,50 +25,13 @@
 
 import Foundation
 
-/// Request
-public protocol Request {
-    
-    /// Response Type
-    associatedtype ResponseType
-    
-    /// URL - Specify url string
-    var url: String { get set }
-    
-    /// HTTP Method
-    var method: HTTPMethod { get set }
-    
-    /// Requst Headers
-    var headers: [String: String]? { get set }
-    
-    /// Request Parameters
-    var parameters: [String: Any]? { get set }
-    
-    /// Response Keypath - path to the key in json for result i.e. "response/data/", "data"
-    var responeKeyPath: String? { get set }
-    
-    
-    //MARK: - Init
-    
-    init(url: String)
-    init(url: String, responeKeyPath: String)
-    init(url: String, method: HTTPMethod, headers: [String: String]?, parameters: [String: Any]?, responeKeyPath: String?)
-    
-    /// execute request
-    func execute(completion: Result<ResponseType, ResponseError>)
-}
+/// Types of Response
+//public enum ResponseType {
+//    case json, model
+//}
 
-extension Request {
-    
-    init(url: String) {
-        
-    }
-    
-    init(url: String, responeKeyPath: String?) {
-        
-    }
-    
-    init(url: String, method: HTTPMethod, headers: [String: String]?, parameters: [String: Any]?, responeKeyPath: String?) {
-        
-    }
-}
+/// JSON Response
+public typealias JSONResponse = ((Any) -> ())
 
+/// Model Response
+public typealias DataModelResponse<T> = ((T) -> ())

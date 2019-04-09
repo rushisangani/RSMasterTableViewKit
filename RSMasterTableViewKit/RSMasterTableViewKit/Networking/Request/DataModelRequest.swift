@@ -25,12 +25,6 @@
 
 import Foundation
 
-/// DataModelResponse
-public typealias DataModelResponse<T> = ((T) -> ())
-
-/// Response Error
-public typealias ResponseError = (code: Int, message: String)
-
 /// DataModelRequest
 public class DataModelRequest<T: Codable>: Request {
     
