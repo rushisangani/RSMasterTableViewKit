@@ -61,7 +61,7 @@ protocol RSTableViewDataSourceUpdate: class {
 }
 
 /// RSTableViewDataSource
-open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
+open class RSTableViewDataSource<Cell: UITableViewCell, T>: NSObject, UITableViewDataSource {
     
     // MARK: - Properties
     
@@ -96,7 +96,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     private weak var dataSourceUpdateDelegate: RSTableViewDataSourceUpdate?
     
     /// cell configuration - (cell, dataObject, indexPath)
-    private var cellConfiguration: UITableViewCellConfiguration<T>?
+    private var cellConfiguration: UITableViewCellConfiguration<Cell, T>?
     
     /// cell identifier
     private var cellIdentifier: String!
@@ -107,7 +107,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
 
     // MARK: - Initialize
     
-    public init(tableView: RSTableView, identifier: String, cellConfiguration: @escaping UITableViewCellConfiguration<T>) {
+    public init(tableView: RSTableView, identifier: String, cellConfiguration: @escaping UITableViewCellConfiguration<Cell, T>) {
         super.init()
         
         tableView.dataSource = self
@@ -128,7 +128,7 @@ open class RSTableViewDataSource<T>: NSObject, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // deque tableview cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as! Cell
         
         // cell configuration
         if let config = cellConfiguration {

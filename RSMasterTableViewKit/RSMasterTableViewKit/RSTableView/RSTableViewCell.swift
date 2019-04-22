@@ -26,7 +26,7 @@
 import UIKit
 
 /// UITableViewCellConfiguration
-public typealias UITableViewCellConfiguration<T> = ((_ cell: UITableViewCell, _ dataObject: T, _ indexPath: IndexPath) -> ())
+public typealias UITableViewCellConfiguration<Cell: UITableViewCell, T> = ((_ cell: Cell, _ dataObject: T, _ indexPath: IndexPath) -> ())
 
 /// Reusable TableViewCell
 public protocol Reusable: class {
