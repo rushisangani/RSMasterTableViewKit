@@ -107,15 +107,18 @@ class DemoViewController: UIViewController {
     func fetchDataFromServer(url: String, completion: @escaping ([Comment]) -> ()) {
         
         // request
-        let request = DataModelRequest<[Comment]>(url: url)
+        let request = Request<[Comment]>(url: url)
         
         // execute
-        request.execute(success: { [weak self] (comments) in
-            self?.dataSource?.appendData(data: comments)
+        request.execute { [weak self] (response) in
             
-        }) { [weak self] (error) in
-            print(error.message)
-            self?.tableView.hideAllAnimations()
+            switch response {
+            case .success(let value):
+                self?.dataSource?.appendData(data: value)
+            case .failure(let error):
+                print(error)
+                self?.tableView.hideAllAnimations()
+            }
         }
     }
 }

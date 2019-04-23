@@ -8,18 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		863213A0216C88B7004593FF /* RSSectionedTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8632139F216C88B7004593FF /* RSSectionedTableViewDataSource.swift */; };
-		865D11492136C129007D8C47 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11482136C129007D8C47 /* Reachability.swift */; };
-		865D114B2136C1D2007D8C47 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */; };
-		865D11532136C399007D8C47 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D114D2136C399007D8C47 /* NetworkManager.swift */; };
-		865D11552136C399007D8C47 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11502136C399007D8C47 /* Request.swift */; };
-		865D11562136C399007D8C47 /* DataModelRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11512136C399007D8C47 /* DataModelRequest.swift */; };
-		865D11572136C399007D8C47 /* JSONRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D11522136C399007D8C47 /* JSONRequest.swift */; };
 		8698C9B92137CA9D00719582 /* RSPagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8698C9B82137CA9D00719582 /* RSPagination.swift */; };
 		8698C9BB2137EE4900719582 /* RSSearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8698C9BA2137EE4900719582 /* RSSearchBarDelegate.swift */; };
+		A2250CC3226EC81A00A959BE /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CB3226EC81A00A959BE /* NetworkManager.swift */; };
+		A2250CC4226EC81A00A959BE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CB5226EC81A00A959BE /* Extensions.swift */; };
+		A2250CC5226EC81A00A959BE /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CB7226EC81A00A959BE /* ReachabilityManager.swift */; };
+		A2250CC6226EC81A00A959BE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CB8226EC81A00A959BE /* Reachability.swift */; };
+		A2250CC7226EC81A00A959BE /* NSManagedObjectRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CBA226EC81A00A959BE /* NSManagedObjectRequest.swift */; };
+		A2250CC8226EC81A00A959BE /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CBB226EC81A00A959BE /* Request.swift */; };
+		A2250CC9226EC81A00A959BE /* DataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CBC226EC81A00A959BE /* DataRequest.swift */; };
+		A2250CCA226EC81A00A959BE /* JSONRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CBD226EC81A00A959BE /* JSONRequest.swift */; };
+		A2250CCB226EC81A00A959BE /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CBF226EC81A00A959BE /* RequestProtocol.swift */; };
+		A2250CCC226EC81A00A959BE /* NSManagedObjectRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CC0226EC81A00A959BE /* NSManagedObjectRequestProtocol.swift */; };
+		A2250CCD226EC81A00A959BE /* ResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2250CC2226EC81A00A959BE /* ResponseError.swift */; };
 		A294F7C220530FD800195712 /* RSMasterTableViewKit.h in Headers */ = {isa = PBXBuildFile; fileRef = A294F7C020530FD800195712 /* RSMasterTableViewKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A294F7D5205310AB00195712 /* RSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294F7D4205310AB00195712 /* RSTableView.swift */; };
-		A2BE66DD225CCBD800ED4E43 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BE66DC225CCBD800ED4E43 /* Response.swift */; };
-		A2BE66E0225CCCB900ED4E43 /* ResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BE66DF225CCCB900ED4E43 /* ResponseError.swift */; };
 		A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */; };
 		A2FC87A3205D377A000DB9EE /* RSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FC87A2205D377A000DB9EE /* RSTableViewCell.swift */; };
 		A2FC87A9205D672F000DB9EE /* RSEmptyDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2FC87A8205D672F000DB9EE /* RSEmptyDataView.xib */; };
@@ -28,20 +31,23 @@
 
 /* Begin PBXFileReference section */
 		8632139F216C88B7004593FF /* RSSectionedTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSectionedTableViewDataSource.swift; sourceTree = "<group>"; };
-		865D11482136C129007D8C47 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
-		865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
-		865D114D2136C399007D8C47 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		865D11502136C399007D8C47 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		865D11512136C399007D8C47 /* DataModelRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModelRequest.swift; sourceTree = "<group>"; };
-		865D11522136C399007D8C47 /* JSONRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRequest.swift; sourceTree = "<group>"; };
 		8698C9B82137CA9D00719582 /* RSPagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSPagination.swift; sourceTree = "<group>"; };
 		8698C9BA2137EE4900719582 /* RSSearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSearchBarDelegate.swift; sourceTree = "<group>"; };
+		A2250CB3226EC81A00A959BE /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		A2250CB5226EC81A00A959BE /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A2250CB7226EC81A00A959BE /* ReachabilityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
+		A2250CB8226EC81A00A959BE /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		A2250CBA226EC81A00A959BE /* NSManagedObjectRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectRequest.swift; sourceTree = "<group>"; };
+		A2250CBB226EC81A00A959BE /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		A2250CBC226EC81A00A959BE /* DataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRequest.swift; sourceTree = "<group>"; };
+		A2250CBD226EC81A00A959BE /* JSONRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRequest.swift; sourceTree = "<group>"; };
+		A2250CBF226EC81A00A959BE /* RequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestProtocol.swift; sourceTree = "<group>"; };
+		A2250CC0226EC81A00A959BE /* NSManagedObjectRequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectRequestProtocol.swift; sourceTree = "<group>"; };
+		A2250CC2226EC81A00A959BE /* ResponseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseError.swift; sourceTree = "<group>"; };
 		A294F7BD20530FD800195712 /* RSMasterTableViewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RSMasterTableViewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A294F7C020530FD800195712 /* RSMasterTableViewKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSMasterTableViewKit.h; sourceTree = "<group>"; };
 		A294F7C120530FD800195712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A294F7D4205310AB00195712 /* RSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableView.swift; sourceTree = "<group>"; };
-		A2BE66DC225CCBD800ED4E43 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
-		A2BE66DF225CCCB900ED4E43 /* ResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseError.swift; sourceTree = "<group>"; };
 		A2FC87A0205D2910000DB9EE /* RSTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableViewDataSource.swift; sourceTree = "<group>"; };
 		A2FC87A2205D377A000DB9EE /* RSTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSTableViewCell.swift; sourceTree = "<group>"; };
 		A2FC87A8205D672F000DB9EE /* RSEmptyDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RSEmptyDataView.xib; sourceTree = "<group>"; };
@@ -59,33 +65,70 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		865D11472136C0C9007D8C47 /* Reachability */ = {
+		A2250CB1226EC81A00A959BE /* NetworkKit */ = {
 			isa = PBXGroup;
 			children = (
-				865D11482136C129007D8C47 /* Reachability.swift */,
-				865D114A2136C1D2007D8C47 /* ReachabilityManager.swift */,
+				A2250CB2226EC81A00A959BE /* Network Manager */,
+				A2250CB4226EC81A00A959BE /* Extensions */,
+				A2250CB6226EC81A00A959BE /* Reachability */,
+			);
+			path = NetworkKit;
+			sourceTree = "<group>";
+		};
+		A2250CB2226EC81A00A959BE /* Network Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A2250CB9226EC81A00A959BE /* Request */,
+				A2250CC1226EC81A00A959BE /* Errors */,
+				A2250CB3226EC81A00A959BE /* NetworkManager.swift */,
+			);
+			path = "Network Manager";
+			sourceTree = "<group>";
+		};
+		A2250CB4226EC81A00A959BE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A2250CB5226EC81A00A959BE /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A2250CB6226EC81A00A959BE /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				A2250CB7226EC81A00A959BE /* ReachabilityManager.swift */,
+				A2250CB8226EC81A00A959BE /* Reachability.swift */,
 			);
 			path = Reachability;
 			sourceTree = "<group>";
 		};
-		865D114C2136C399007D8C47 /* Networking */ = {
+		A2250CB9226EC81A00A959BE /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				865D114D2136C399007D8C47 /* NetworkManager.swift */,
-				865D114F2136C399007D8C47 /* Request */,
-				A2BE66DE225CCC3A00ED4E43 /* Response */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
-		865D114F2136C399007D8C47 /* Request */ = {
-			isa = PBXGroup;
-			children = (
-				865D11502136C399007D8C47 /* Request.swift */,
-				865D11522136C399007D8C47 /* JSONRequest.swift */,
-				865D11512136C399007D8C47 /* DataModelRequest.swift */,
+				A2250CBA226EC81A00A959BE /* NSManagedObjectRequest.swift */,
+				A2250CBB226EC81A00A959BE /* Request.swift */,
+				A2250CBC226EC81A00A959BE /* DataRequest.swift */,
+				A2250CBD226EC81A00A959BE /* JSONRequest.swift */,
+				A2250CBE226EC81A00A959BE /* Protocols */,
 			);
 			path = Request;
+			sourceTree = "<group>";
+		};
+		A2250CBE226EC81A00A959BE /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A2250CBF226EC81A00A959BE /* RequestProtocol.swift */,
+				A2250CC0226EC81A00A959BE /* NSManagedObjectRequestProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A2250CC1226EC81A00A959BE /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				A2250CC2226EC81A00A959BE /* ResponseError.swift */,
+			);
+			path = Errors;
 			sourceTree = "<group>";
 		};
 		A294F7B320530FD800195712 = {
@@ -110,8 +153,7 @@
 				A294F7C020530FD800195712 /* RSMasterTableViewKit.h */,
 				A294F7D32053107300195712 /* RSTableView */,
 				A2FC87A7205D6714000DB9EE /* RSEmptyDataSet */,
-				865D11472136C0C9007D8C47 /* Reachability */,
-				865D114C2136C399007D8C47 /* Networking */,
+				A2250CB1226EC81A00A959BE /* NetworkKit */,
 				A294F7C120530FD800195712 /* Info.plist */,
 			);
 			path = RSMasterTableViewKit;
@@ -128,15 +170,6 @@
 				8698C9BA2137EE4900719582 /* RSSearchBarDelegate.swift */,
 			);
 			path = RSTableView;
-			sourceTree = "<group>";
-		};
-		A2BE66DE225CCC3A00ED4E43 /* Response */ = {
-			isa = PBXGroup;
-			children = (
-				A2BE66DC225CCBD800ED4E43 /* Response.swift */,
-				A2BE66DF225CCCB900ED4E43 /* ResponseError.swift */,
-			);
-			path = Response;
 			sourceTree = "<group>";
 		};
 		A2FC87A7205D6714000DB9EE /* RSEmptyDataSet */ = {
@@ -231,20 +264,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				8698C9BB2137EE4900719582 /* RSSearchBarDelegate.swift in Sources */,
-				865D11552136C399007D8C47 /* Request.swift in Sources */,
-				865D11572136C399007D8C47 /* JSONRequest.swift in Sources */,
+				A2250CC8226EC81A00A959BE /* Request.swift in Sources */,
+				A2250CCA226EC81A00A959BE /* JSONRequest.swift in Sources */,
+				A2250CCD226EC81A00A959BE /* ResponseError.swift in Sources */,
+				A2250CC4226EC81A00A959BE /* Extensions.swift in Sources */,
 				A2FC87A3205D377A000DB9EE /* RSTableViewCell.swift in Sources */,
 				A294F7D5205310AB00195712 /* RSTableView.swift in Sources */,
+				A2250CC5226EC81A00A959BE /* ReachabilityManager.swift in Sources */,
+				A2250CC7226EC81A00A959BE /* NSManagedObjectRequest.swift in Sources */,
+				A2250CC9226EC81A00A959BE /* DataRequest.swift in Sources */,
 				863213A0216C88B7004593FF /* RSSectionedTableViewDataSource.swift in Sources */,
+				A2250CCC226EC81A00A959BE /* NSManagedObjectRequestProtocol.swift in Sources */,
+				A2250CC3226EC81A00A959BE /* NetworkManager.swift in Sources */,
+				A2250CCB226EC81A00A959BE /* RequestProtocol.swift in Sources */,
+				A2250CC6226EC81A00A959BE /* Reachability.swift in Sources */,
 				A2FC87A1205D2910000DB9EE /* RSTableViewDataSource.swift in Sources */,
 				8698C9B92137CA9D00719582 /* RSPagination.swift in Sources */,
-				865D11532136C399007D8C47 /* NetworkManager.swift in Sources */,
-				A2BE66DD225CCBD800ED4E43 /* Response.swift in Sources */,
-				865D11562136C399007D8C47 /* DataModelRequest.swift in Sources */,
-				865D114B2136C1D2007D8C47 /* ReachabilityManager.swift in Sources */,
-				865D11492136C129007D8C47 /* Reachability.swift in Sources */,
 				A2FC87AB205D6979000DB9EE /* RSEmptyDataView.swift in Sources */,
-				A2BE66E0225CCCB900ED4E43 /* ResponseError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
